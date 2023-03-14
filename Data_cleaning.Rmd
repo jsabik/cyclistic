@@ -1,6 +1,6 @@
 ---
-title: "Data Cleaning"
-date: "`r Sys.Date()`"
+title: <br>"Data Cleaning"
+date: 'r Sys.Date()'
 output:
   rmdformats::downcute: 
     self_contained: true
@@ -218,7 +218,7 @@ Our cleaning process removed 124,562 rows from our data set: 118,453 rides were 
 The following code exports the data as a csv file for later analysis.
 
 ```{r}
-write.csv(all_rides,"Data/valid_rides.csv", row.names = FALSE)
+write.csv(all_rides,"Data/all_rides.csv", row.names = FALSE)
 write.csv(valid_rides,"Data/valid_rides.csv", row.names = FALSE)
 ```
 

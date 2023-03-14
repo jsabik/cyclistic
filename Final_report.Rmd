@@ -1,7 +1,26 @@
 ---
-title: "Final Report"
-output: html_document
+title: <br> "Final Report"
+date: 'r Sys.Date()'
+output:
+  rmdformats::downcute: 
+    self_contained: true
 ---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(rmdformats)
+## Global options
+options(max.print="75")
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = NA,
+	prompt = FALSE,
+	results = TRUE
+)
+opts_knit$set(width=75)
+```
 
 # Statement of Business Task
 

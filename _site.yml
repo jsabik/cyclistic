@@ -2,7 +2,7 @@ name: "Cyclistic Bike-share Case Study"
 navbar:
   title: "Cyclistic Bike-share Case Study"
   left:
-    - text: "Context"
+    - text: "Home"
       href: index.html
     - text: "Final Report"
       href: Final_report.html
@@ -10,4 +10,5 @@ navbar:
       href: Data_cleaning.html
     - text: "Code for Analysis"
       href: Analysis_code.html
+      
 output_dir: "docs"

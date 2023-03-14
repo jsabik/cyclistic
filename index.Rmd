@@ -1,23 +1,24 @@
 ---
 title: "Cyclistic Case Study" 
-output:   
-rmdformats::downcute:
-self_contained: true
+date: 'r Sys.Date()'
+output:
+  rmdformats::downcute: 
+    self_contained: true
 ---
 
 ```{r setup, include=FALSE}
-install.packages("knitr")
-install.packages("rmdformats")
 library(knitr)
 library(rmdformats)
 ## Global options
 options(max.print="75")
-opts_chunk$set(echo=FALSE,
-               prompt=FALSE,
-               comment=NA,
-               message=FALSE,
-               warning=FALSE, 
-               results="hide")
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = NA,
+	prompt = FALSE,
+	results = TRUE
+)
 opts_knit$set(width=75)
 ```
 
