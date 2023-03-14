@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="generator" content="pandoc" />
+
+    
+        <meta name="date" content="2023-03-14" />
+    
+    <title>Data Cleaning</title>
+
+        <script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+        <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="site_libs/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+        <script src="site_libs/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+        <script src="site_libs/navigation-1.1/tabsets.js"></script>
+        <link href="site_libs/downcute-0.1/downcute.css" rel="stylesheet" />
+        <link href="site_libs/downcute-0.1/downcute_fonts_embed.css" rel="stylesheet" />
+        <script src="site_libs/downcute-0.1/downcute_styles.js"></script>
+        <script src="site_libs/downcute-0.1/downcute.js"></script>
+        <script src="site_libs/prism-1.22/prism.js"></script>
+    
+    
+    
+    
+    <!-- tabsets -->
+    <script>
+      $(document).ready(function () {
+	  window.buildTabsets("toc");
+      });
+      $(document).ready(function () {
+	  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+	      $(this).parent().toggleClass('nav-tabs-open')
+	  });
+      });
+    </script>
+
+    <!-- code folding -->
+    
+    <!-- code download -->
+    
+    <!-- tabsets dropdown -->
+
+    <style type="text/css">
+      .tabset-dropdown > .nav-tabs {
+	  display: inline-table;
+	  max-height: 500px;
+	  min-height: 44px;
+	  overflow-y: auto;
+	  background: white;
+	  border: 1px solid #ddd;
+	  border-radius: 4px;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li.active:before {
+	  content: "";
+	  font-family: 'Glyphicons Halflings';
+	  display: inline-block;
+	  padding: 10px;
+	  border-right: 1px solid #ddd;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+	  content: "&#xe258;";
+	  border: none;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+	  content: "";
+	  font-family: 'Glyphicons Halflings';
+	  display: inline-block;
+	  padding: 10px;
+	  border-right: 1px solid #ddd;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li.active {
+	  display: block;
+      }
+
+      .tabset-dropdown > .nav-tabs > li.active a {
+  	  padding: 0 15px !important;
+      }
+
+      .tabset-dropdown > .nav-tabs > li > a,
+      .tabset-dropdown > .nav-tabs > li > a:focus,
+      .tabset-dropdown > .nav-tabs > li > a:hover {
+	  border: none;
+	  display: inline-block;
+	  border-radius: 4px;
+	  background-color: transparent;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+	  display: block;
+	  float: none;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li {
+	  display: none;
+	  margin-left: 0 !important;
+      }
+    </style>
+    
+</head>
+
+<body class="preload">
+
+   	
+               <!-- downcute start -->   
+   <div id="docute" class="Root theme-default">
+     <div class="Page layout-narrow">
+      <div class="Wrap">
+        <div class="Sidebar">
+          <div class="SidebarItems" id="toc">
+            <ul>
+            <li><a href="#cleaning-process"
+            id="toc-cleaning-process">Cleaning process</a></li>
+            <li><a href="#installing-packages"
+            id="toc-installing-packages">1. Installing Packages</a></li>
+            <li><a href="#combining-datasets"
+            id="toc-combining-datasets">2. Combining datasets</a>
+            <ul>
+            <li><a href="#assigning-time-zone"
+            id="toc-assigning-time-zone">2.1 Assigning time
+            zone</a></li>
+            </ul></li>
+            <li><a href="#data-transformation"
+            id="toc-data-transformation">3. Data transformation</a>
+            <ul>
+            <li><a href="#create-a-variable-for-the-day-of-week"
+            id="toc-create-a-variable-for-the-day-of-week">3.1 Create a
+            variable for the day of week</a></li>
+            <li><a href="#create-a-variable-for-the-ride-duration"
+            id="toc-create-a-variable-for-the-ride-duration">3.2 Create
+            a variable for the ride duration</a></li>
+            <li><a href="#convert-categorical-variables-to-factors"
+            id="toc-convert-categorical-variables-to-factors">3.3
+            Convert categorical variables to factors</a></li>
+            </ul></li>
+            <li><a href="#examine-data" id="toc-examine-data">4. Examine
+            data</a>
+            <ul>
+            <li><a href="#examine-primary-key"
+            id="toc-examine-primary-key">4.1 Examine primary
+            key</a></li>
+            <li><a href="#invalid-durations"
+            id="toc-invalid-durations">4.2 Invalid durations</a></li>
+            <li><a href="#null-values" id="toc-null-values">4.3 Null
+            values</a></li>
+            <li><a href="#rides-over-24-hours"
+            id="toc-rides-over-24-hours">4.4 Rides over 24
+            hours</a></li>
+            </ul></li>
+            <li><a href="#cleaning-data" id="toc-cleaning-data">5.
+            Cleaning data</a></li>
+            </ul>
+          </div>
+          <div data-position="sidebar:post-end" class="InjectedComponents"><div class="dark-theme-toggler"><div class="toggle "><div class="toggle-track"><div class="toggle-track-check"><img  src="data:image/png;base64,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" role="presentation" style="pointer-events: none;" width="16" height="16"></div> <div class="toggle-track-x"><img src="data:image/png;base64,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" role="presentation" style="pointer-events: none;" width="16" height="16"></div></div> <div class="toggle-thumb"></div></div> <input type="checkbox" aria-label="Switch between Dark and Default theme" class="toggler-screen-reader-only"></div></div>
+        </div>
+        <div class="Main">
+          <div class="Content" id="content"> 
+   
+   
+      
+      <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">Cyclistic Bike-share Case Study</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li>
+        <a href="index.html">Context</a>
+      </li>
+      <li>
+        <a href="Final_report.html">Final Report</a>
+      </li>
+      <li>
+        <a href="Data_cleaning.html">Data Cleaning</a>
+      </li>
+      <li>
+        <a href="Analysis_code.html">Code for Analysis</a>
+      </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container -->
+      </div><!--/.navbar -->
+        
+      <h1 class="title">Data Cleaning</h1>
+      
+      <p class="authors">
+         <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2023-03-14</p>
+           
+
+   
+      
+   
+<!-- Don't indent these lines or it will mess pre blocks indentation --> 
+<div class="page-content has-page-title">
+<div id="cleaning-process" class="section level1">
+<h1>Cleaning process</h1>
+<p>This page gives an outline of the process and assumptions used to
+combine, clean, and transform raw trip data from Cyclistic (Divvy) in
+preperation for analysis. At the time of collection, data up to October
+2022 were available. For the purposes of our analysis, the 12 most
+recent months of data were selected.</p>
+<p>Cyclistic is a fictional company, but the data is obtained from Divvy
+Bikes, a real bike sharing program in Chicago, Il. A description of the
+datasets and their files <a
+href="https://divvybikes.com/system-data">can be accessed here</a>.</p>
+</div>
+<div id="installing-packages" class="section level1">
+<h1>1. Installing Packages</h1>
+<pre class="r"><code>#Tidyverse was used for data cleaning and analysis
+library(tidyverse)</code></pre>
+</div>
+<div id="combining-datasets" class="section level1">
+<h1>2. Combining datasets</h1>
+<p>The structure of these CSV files were inspected using Excel prior to
+import and binding. The structure of the merged dataset was checked
+again after binding.</p>
+<pre class="r"><code>#Import data files
+nov21 &lt;- read_csv(&quot;Data/202111-divvy-tripdata.csv&quot;)
+dec21 &lt;- read_csv(&quot;Data/202112-divvy-tripdata.csv&quot;)
+jan22 &lt;- read_csv(&quot;Data/202201-divvy-tripdata.csv&quot;)
+feb22 &lt;- read_csv(&quot;Data/202202-divvy-tripdata.csv&quot;)
+mar22 &lt;- read_csv(&quot;Data/202203-divvy-tripdata.csv&quot;)
+apr22 &lt;- read_csv(&quot;Data/202204-divvy-tripdata.csv&quot;)
+may22 &lt;- read_csv(&quot;Data/202205-divvy-tripdata.csv&quot;)
+jun22 &lt;- read_csv(&quot;Data/202206-divvy-tripdata.csv&quot;)
+jul22 &lt;- read_csv(&quot;Data/202207-divvy-tripdata.csv&quot;)
+aug22 &lt;- read_csv(&quot;Data/202208-divvy-tripdata.csv&quot;)
+sep22 &lt;- read_csv(&quot;Data/202209-divvy-tripdata.csv&quot;)
+oct22 &lt;- read_csv(&quot;Data/202210-divvy-tripdata.csv&quot;)
+
+#Join data files
+all_rides &lt;- bind_rows(nov21,dec21,jan22,feb22,mar22,apr22,may22,jun22,jul22,
+                      aug22,sep22,oct22)
+                      
+#delete import files and clear from memory
+rm(nov21,dec21,jan22,feb22,mar22,apr22,may22,jun22,jul22,aug22,sep22,oct22)
+gc()
+
+str(all_rides)</code></pre>
+<div id="assigning-time-zone" class="section level2">
+<h2>2.1 Assigning time zone</h2>
+<p>The datetime variables started_at and ended_at were both
+automatically imported as POSIXct data types. The following code assigns
+the Chicago timezone. Daylight Savings Time presented difficulties with
+a small number of rides that crossed over a DST boundary.</p>
+<pre class="r"><code>#Set time zone
+all_rides &lt;- all_rides %&gt;% 
+  mutate(started_at = force_tz(all_rides$started_at,
+                               tzone = &quot;America/Chicago&quot;,
+                               roll_dst = c(&quot;pre&quot;, &quot;post&quot;))) %&gt;% 
+  mutate(ended_at = force_tz(all_rides$ended_at,
+                             tzone = &quot;America/Chicago&quot;,
+                             roll_dst = c(&quot;pre&quot;, &quot;post&quot;)))
+#Confirm time zone is America/Chicago
+tz(all_rides$started_at)</code></pre>
+<pre><code>[1] &quot;America/Chicago&quot;</code></pre>
+<pre class="r"><code>tz(all_rides$ended_at)</code></pre>
+<pre><code>[1] &quot;America/Chicago&quot;</code></pre>
+</div>
+</div>
+<div id="data-transformation" class="section level1">
+<h1>3. Data transformation</h1>
+<div id="create-a-variable-for-the-day-of-week" class="section level2">
+<h2>3.1 Create a variable for the day of week</h2>
+<p>Part of our analysis will examine which days of the week are most
+popular with different rider groups. Here we create a variable for the
+day of the week.</p>
+<pre class="r"><code>weekday_levels &lt;- c(&#39;Sunday&#39;, &#39;Monday&#39;, &#39;Tuesday&#39;, &#39;Wednesday&#39;, &#39;Thursday&#39;, 
+                    &#39;Friday&#39;, &#39;Saturday&#39;)
+all_rides &lt;- all_rides %&gt;% 
+  mutate(day_of_week = factor(weekdays(started_at), levels = weekday_levels))</code></pre>
+</div>
+<div id="create-a-variable-for-the-ride-duration"
+class="section level2">
+<h2>3.2 Create a variable for the ride duration</h2>
+<p>With the ‘started_at’ time and ‘ended_at’ time, we can calculate an
+interesting variable for analysis: the duration of each ride.</p>
+<pre class="r"><code>#Create ride_length to measure duration of ride
+all_rides &lt;- all_rides %&gt;% 
+  mutate(ride_length = as.duration(started_at%--%ended_at))</code></pre>
+</div>
+<div id="convert-categorical-variables-to-factors"
+class="section level2">
+<h2>3.3 Convert categorical variables to factors</h2>
+<p>Our data has two categorical variables which can be better analyzed
+by assigning them as factors, ‘rideable_type’ and ‘member_casual’.</p>
+<pre class="r"><code>#Convert &#39;rideable_type&#39; and &#39;member_casual&#39; to factors
+all_rides &lt;- all_rides %&gt;% 
+  mutate(rideable_type = factor(rideable_type))
+all_rides &lt;- all_rides %&gt;% 
+  mutate(member_casual = factor(member_casual))</code></pre>
+</div>
+</div>
+<div id="examine-data" class="section level1">
+<h1>4. Examine data</h1>
+<p>Before we clean our data, we will explore the data to look for
+errors, blanks, or any values out of range for our analysis.</p>
+<div id="examine-primary-key" class="section level2">
+<h2>4.1 Examine primary key</h2>
+<p>Our data has a primary key, which is the ‘ride_id’ variable. We will
+check the integrity of our data by ensuring that each ‘ride_id’ is
+unique.</p>
+<pre class="r"><code>#Check if each trip_id is unique
+all_rides %&gt;%
+  distinct(ride_id) %&gt;% 
+  summarise(total_count=n(),.groups=&#39;drop&#39;) %&gt;% 
+  arrange(-total_count)</code></pre>
+<pre><code># A tibble: 1 × 1
+  total_count
+        &lt;int&gt;
+1     5755694</code></pre>
+<p>The result, 5,755,694, is equal to the number of rows in all_rides.
+Each ride_id is unique.</p>
+</div>
+<div id="invalid-durations" class="section level2">
+<h2>4.2 Invalid durations</h2>
+<p><a href="https://divvybikes.com/system-data">Divvy’s data page</a>
+states that “The data has been processed to remove trips that are taken
+by staff as they service and inspect the system; and any trips that were
+below 60 seconds in length (potentially false starts or users trying to
+re-dock a bike to ensure it was secure).” In reviewing our data, we see
+that the minimum value for duration was negative. Exploring the number
+of trips less than 60s finds the following.</p>
+<pre class="r"><code>#Examine trip lenghts &lt; 60s in duration
+all_rides %&gt;%
+  filter(ride_length&lt;60) %&gt;% 
+  summarise(total_count=n(),.groups=&#39;drop&#39;) %&gt;% 
+  arrange(-total_count)</code></pre>
+<pre><code># A tibble: 1 × 1
+  total_count
+        &lt;int&gt;
+1      118453</code></pre>
+<pre class="r"><code>#118,453 ride_lentgh &lt; 60s</code></pre>
+</div>
+<div id="null-values" class="section level2">
+<h2>4.3 Null values</h2>
+<p>Our data should be complete, without any blank fields. The following
+code will count if there are any null values in our data.</p>
+<pre class="r"><code>all_rides %&gt;% 
+  summarise(across(everything(), ~ sum(is.na(.x))))</code></pre>
+<pre><code># A tibble: 1 × 15
+  ride_id rideable_type starte…¹ ended…² start…³ start…⁴ end_s…⁵ end_s…⁶ start…⁷
+    &lt;int&gt;         &lt;int&gt;    &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
+1       0             0        0       0  878177  878177  940010  940010       0
+# … with 6 more variables: start_lng &lt;int&gt;, end_lat &lt;int&gt;, end_lng &lt;int&gt;,
+#   member_casual &lt;int&gt;, day_of_week &lt;int&gt;, ride_length &lt;int&gt;, and abbreviated
+#   variable names ¹​started_at, ²​ended_at, ³​start_station_name,
+#   ⁴​start_station_id, ⁵​end_station_name, ⁶​end_station_id, ⁷​start_lat</code></pre>
+<p>There are null values in start_station_name, start_station_id,
+end_station_name, end_station_id, end_lat, and end_lng.</p>
+<p>The number of null values for station names and ids is concerning.
+The nulls in the station variables account for 23.37% of our data. The
+end latitude and longitude are less concerning, accounting for &lt;0.01%
+of the data.</p>
+<p>In an ideal situation, we could ask others who collect this data why
+parts of it are missing. For our case study, we will use publicly
+available information to fill in our understanding of the data.</p>
+<div id="a-null-values-in-end_lat-and-end_lng" class="section level3">
+<h3>4.3(a) Null values in end_lat and end_lng</h3>
+<pre class="r"><code>#Isolate null values of &#39;end_lat&#39; and &#39;end_lng&#39; for analysis
+no_end_latlng &lt;- all_rides %&gt;% 
+  filter(is.na(end_lat) | is.na(end_lng))
+summary(no_end_latlng)</code></pre>
+<pre><code>   ride_id                rideable_type    started_at                    
+ Length:5835        classic_bike :3265   Min.   :2021-11-01 07:03:54.00  
+ Class :character   docked_bike  :2570   1st Qu.:2022-05-19 13:17:49.50  
+ Mode  :character   electric_bike:   0   Median :2022-07-02 15:50:32.00  
+                                         Mean   :2022-06-24 21:47:55.81  
+                                         3rd Qu.:2022-08-20 21:00:17.50  
+    ended_at                      start_station_name start_station_id  
+ Min.   :2021-11-01 07:18:08.00   Length:5835        Length:5835       
+ 1st Qu.:2022-05-20 23:36:26.00   Class :character   Class :character  
+ Median :2022-07-04 12:56:23.00   Mode  :character   Mode  :character  
+ Mean   :2022-06-26 23:02:02.21                                        
+ 3rd Qu.:2022-08-23 17:27:50.50                                        
+ end_station_name   end_station_id       start_lat       start_lng     
+ Length:5835        Length:5835        Min.   :41.65   Min.   :-87.77  
+ Class :character   Class :character   1st Qu.:41.87   1st Qu.:-87.66  
+ Mode  :character   Mode  :character   Median :41.89   Median :-87.63  
+                                       Mean   :41.87   Mean   :-87.64  
+                                       3rd Qu.:41.91   3rd Qu.:-87.62  
+    end_lat        end_lng     member_casual    day_of_week  
+ Min.   : NA    Min.   : NA    casual:5144   Sunday   :1093  
+ 1st Qu.: NA    1st Qu.: NA    member: 691   Monday   : 727  
+ Median : NA    Median : NA                  Tuesday  : 656  
+ Mean   :NaN    Mean   :NaN                  Wednesday: 618  
+ 3rd Qu.: NA    3rd Qu.: NA                  Thursday : 674  
+  ride_length                            
+ Min.   :6s                              
+ 1st Qu.:89991s (~1.04 days)             
+ Median :89994s (~1.04 days)             
+ Mean   :177246.388517566s (~2.05 days)  
+ 3rd Qu.:90001s (~1.04 days)             
+ [ reached getOption(&quot;max.print&quot;) -- omitted 2 rows ]</code></pre>
+<pre class="r"><code>head(no_end_latlng)</code></pre>
+<pre><code># A tibble: 6 × 15
+  ride_id        ridea…¹ started_at          ended_at            start…² start…³
+  &lt;chr&gt;          &lt;fct&gt;   &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;   &lt;chr&gt;  
+1 D66FB7A5034CD… classi… 2021-11-23 11:53:36 2021-11-24 12:53:30 Laflin… 13307  
+2 214DC891AC5E7… classi… 2021-11-25 19:23:35 2021-11-26 20:23:30 Rush S… 15530  
+3 4409AA46BDD76… classi… 2021-11-06 13:13:06 2021-11-07 13:13:01 Ashlan… 16950  
+4 C4A464C2818DB… docked… 2021-11-06 16:40:58 2021-11-06 17:24:39 Millen… 13008  
+5 E58A224FA0AC8… docked… 2021-11-25 13:56:42 2021-11-26 16:50:51 Millen… 13008  
+6 D893434A1E5B0… docked… 2021-11-26 16:07:04 2021-11-27 17:07:05 Shedd … 15544  
+# … with 9 more variables: end_station_name &lt;chr&gt;, end_station_id &lt;chr&gt;,
+#   start_lat &lt;dbl&gt;, start_lng &lt;dbl&gt;, end_lat &lt;dbl&gt;, end_lng &lt;dbl&gt;,
+#   member_casual &lt;fct&gt;, day_of_week &lt;fct&gt;, ride_length &lt;Duration&gt;, and
+#   abbreviated variable names ¹​rideable_type, ²​start_station_name,
+#   ³​start_station_id</code></pre>
+<p>Micromobility devices, which include bikes and scooters, are not
+always returned. There are <a
+href="https://blockclubchicago.org/2022/10/04/how-did-this-chicago-divvy-bike-end-up-in-mexico-its-unclear-but-cant-blame-this-bike-for-heading-south/">several
+documented instances of Divvy bikes found out of place</a>, some as far
+as Michoacan, Mexico. Nearly all of these rows have a ride duration of
+approximately 24 hours. After 24 hours, <a
+href="https://help.divvybikes.com/hc/en-us/articles/360033123412-My-bike-was-lost-or-stolen">Divvy
+considers a bike to be lost or stolen, and assesses a fee.</a> For the
+purpose of this analysis, we will assume that any trip without an
+end_lat and end_lng is missing or stolen, and exclude those rides from
+this analysis.</p>
+</div>
+<div id="b-null-station-name-and-id" class="section level3">
+<h3>4.3(b) Null station name and id</h3>
+<p>Let’s examine the station names and ids. If we isolate and analyze
+these rows, we see that their start and stop latitude and longitude
+variables are rounded to two place values, as opposed to rides with
+station names and ids, which continue to four decimal places.</p>
+<pre class="r"><code>no_station &lt;- all_rides %&gt;% 
+  filter(is.na(start_station_name) | is.na(end_station_name))
+
+head(no_station)</code></pre>
+<pre><code># A tibble: 6 × 15
+  ride_id        ridea…¹ started_at          ended_at            start…² start…³
+  &lt;chr&gt;          &lt;fct&gt;   &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;   &lt;chr&gt;  
+1 7C00A93E10556… electr… 2021-11-27 13:27:38 2021-11-27 13:46:38 &lt;NA&gt;    &lt;NA&gt;   
+2 90854840DFD50… electr… 2021-11-27 13:38:25 2021-11-27 13:56:10 &lt;NA&gt;    &lt;NA&gt;   
+3 0A7D10CDD1440… electr… 2021-11-26 22:03:34 2021-11-26 22:05:56 &lt;NA&gt;    &lt;NA&gt;   
+4 2F3BE33085BCF… electr… 2021-11-27 09:56:49 2021-11-27 10:01:50 &lt;NA&gt;    &lt;NA&gt;   
+5 D67B4781A1992… electr… 2021-11-26 19:09:28 2021-11-26 19:30:41 &lt;NA&gt;    &lt;NA&gt;   
+6 02F85C2C3C5F7… electr… 2021-11-26 18:34:07 2021-11-26 18:52:49 Michig… 13042  
+# … with 9 more variables: end_station_name &lt;chr&gt;, end_station_id &lt;chr&gt;,
+#   start_lat &lt;dbl&gt;, start_lng &lt;dbl&gt;, end_lat &lt;dbl&gt;, end_lng &lt;dbl&gt;,
+#   member_casual &lt;fct&gt;, day_of_week &lt;fct&gt;, ride_length &lt;Duration&gt;, and
+#   abbreviated variable names ¹​rideable_type, ²​start_station_name,
+#   ³​start_station_id</code></pre>
+<p>What if these rides do not start or end at a station, because they
+are not required to? A search of available information finds that in
+2020, Divvy began <a
+href="https://divvybikes.com/explore-chicago/expansion-temp">introducing
+dockless bikes as part of their system</a>. This would explain why the
+latitude and longitude are truncated – to anonymize user data. For the
+purpose of this analysis, we will assume that rides with null values in
+the station name and id fields were dockless rides.</p>
+</div>
+</div>
+<div id="rides-over-24-hours" class="section level2">
+<h2>4.4 Rides over 24 hours</h2>
+<p>As discovered in section 4.3(a), Divvy considers any bike lost for
+more than 24 hours to be lost or stolen. There are 278 rides in our data
+set with durations greater than 24 hours. For the purpose of this
+analysis, they will be excluded.</p>
+<pre class="r"><code>all_rides %&gt;% 
+  filter(ride_length &gt;= (24*60*60)) %&gt;%
+  filter(!is.na(end_lat) | !is.na(end_lng)) %&gt;% 
+  summarize(count=n())</code></pre>
+<pre><code># A tibble: 1 × 1
+  count
+  &lt;int&gt;
+1   278</code></pre>
+</div>
+</div>
+<div id="cleaning-data" class="section level1">
+<h1>5. Cleaning data</h1>
+<p>After a through exploration of the data, it can be efficiently
+filtered and cleaned.</p>
+<pre class="r"><code>valid_rides &lt;- all_rides %&gt;% 
+  filter(ride_length &gt;= 60) %&gt;% 
+  filter(ride_length &lt; (24*60*60)) %&gt;% 
+  filter(!is.na(end_lat) | !is.na(end_lng)) %&gt;% 
+  mutate(start_station_name = replace_na(start_station_name, &quot;Dockless&quot;)) %&gt;% 
+  mutate(start_station_id = replace_na(start_station_id, &quot;No ID&quot;)) %&gt;% 
+  mutate(end_station_name = replace_na(end_station_name, &quot;Dockless&quot;)) %&gt;% 
+  mutate(end_station_id = replace_na(end_station_id, &quot;No ID&quot;))
+
+summary(valid_rides)</code></pre>
+<pre><code>   ride_id                rideable_type       started_at                    
+ Length:5631132     classic_bike :2596050   Min.   :2021-11-01 00:00:14.00  
+ Class :character   docked_bike  : 177938   1st Qu.:2022-04-27 09:44:33.25  
+ Mode  :character   electric_bike:2857144   Median :2022-06-30 16:48:58.50  
+                                            Mean   :2022-06-13 18:26:37.81  
+                                            3rd Qu.:2022-08-24 18:27:55.50  
+    ended_at                      start_station_name start_station_id  
+ Min.   :2021-11-01 00:04:06.00   Length:5631132     Length:5631132    
+ 1st Qu.:2022-04-27 09:56:54.50   Class :character   Class :character  
+ Median :2022-06-30 17:04:42.50   Mode  :character   Mode  :character  
+ Mean   :2022-06-13 18:43:15.53                                        
+ 3rd Qu.:2022-08-24 18:45:07.50                                        
+ end_station_name   end_station_id       start_lat       start_lng     
+ Length:5631132     Length:5631132     Min.   :41.64   Min.   :-87.84  
+ Class :character   Class :character   1st Qu.:41.88   1st Qu.:-87.66  
+ Mode  :character   Mode  :character   Median :41.90   Median :-87.64  
+                                       Mean   :41.90   Mean   :-87.65  
+                                       3rd Qu.:41.93   3rd Qu.:-87.63  
+    end_lat         end_lng       member_casual       day_of_week    
+ Min.   :41.39   Min.   :-88.97   casual:2300760   Sunday   :774910  
+ 1st Qu.:41.88   1st Qu.:-87.66   member:3330372   Monday   :758320  
+ Median :41.90   Median :-87.64                    Tuesday  :771556  
+ Mean   :41.90   Mean   :-87.65                    Wednesday:788199  
+ 3rd Qu.:41.93   3rd Qu.:-87.63                    Thursday :821849  
+  ride_length                               
+ Min.   :60s (~1 minutes)                   
+ 1st Qu.:365s (~6.08 minutes)               
+ Median :633s (~10.55 minutes)              
+ Mean   :997.71594823208s (~16.63 minutes)  
+ 3rd Qu.:1128s (~18.8 minutes)              
+ [ reached getOption(&quot;max.print&quot;) -- omitted 2 rows ]</code></pre>
+<pre class="r"><code>str(valid_rides)</code></pre>
+<pre><code>tibble [5,631,132 × 15] (S3: tbl_df/tbl/data.frame)
+ $ ride_id           : chr [1:5631132] &quot;7C00A93E10556E47&quot; &quot;90854840DFD508BA&quot; &quot;0A7D10CDD144061C&quot; &quot;2F3BE33085BCFF02&quot; ...
+ $ rideable_type     : Factor w/ 3 levels &quot;classic_bike&quot;,..: 3 3 3 3 3 3 3 3 3 3 ...
+ $ started_at        : POSIXct[1:5631132], format: &quot;2021-11-27 13:27:38&quot; &quot;2021-11-27 13:38:25&quot; ...
+ $ ended_at          : POSIXct[1:5631132], format: &quot;2021-11-27 13:46:38&quot; &quot;2021-11-27 13:56:10&quot; ...
+ $ start_station_name: chr [1:5631132] &quot;Dockless&quot; &quot;Dockless&quot; &quot;Dockless&quot; &quot;Dockless&quot; ...
+ $ start_station_id  : chr [1:5631132] &quot;No ID&quot; &quot;No ID&quot; &quot;No ID&quot; &quot;No ID&quot; ...
+ $ end_station_name  : chr [1:5631132] &quot;Dockless&quot; &quot;Dockless&quot; &quot;Dockless&quot; &quot;Dockless&quot; ...
+ $ end_station_id    : chr [1:5631132] &quot;No ID&quot; &quot;No ID&quot; &quot;No ID&quot; &quot;No ID&quot; ...
+ $ start_lat         : num [1:5631132] 41.9 42 42 41.9 41.9 ...
+ $ start_lng         : num [1:5631132] -87.7 -87.7 -87.7 -87.8 -87.6 ...
+ $ end_lat           : num [1:5631132] 42 41.9 42 41.9 41.9 ...
+ $ end_lng           : num [1:5631132] -87.7 -87.7 -87.7 -87.8 -87.6 ...
+ $ member_casual     : Factor w/ 2 levels &quot;casual&quot;,&quot;member&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+ $ day_of_week       : Factor w/ 7 levels &quot;Sunday&quot;,&quot;Monday&quot;,..: 7 7 6 7 6 6 7 7 7 7 ...
+ $ ride_length       :Formal class &#39;Duration&#39; [package &quot;lubridate&quot;] with 1 slot
+  .. ..@ .Data: num [1:5631132] 1140 1065 142 301 1273 ...</code></pre>
+<p>Our cleaning process removed 124,562 rows from our data set: 118,453
+rides were less than 60s, 5,377 rides were greater than 24h, and 5,835
+had null values for end_lat and end_lng. There is significant overlap
+between the latter two categories.</p>
+<p><strong>Saving the cleaned data</strong></p>
+<p>The following code exports the data as a csv file for later
+analysis.</p>
+<pre class="r"><code>write.csv(all_rides,&quot;Data/valid_rides.csv&quot;, row.names = FALSE)
+write.csv(valid_rides,&quot;Data/valid_rides.csv&quot;, row.names = FALSE)</code></pre>
+</div>
+</div>
+
+   
+   
+              </div>
+  </div>
+  </div>
+  </div>
+   
+      
+
+  <script>
+    $(document).ready(function () {
+
+		// add bootstrap table styles to pandoc tables
+	$('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+		
+ 		
+	    });
+  </script>
+
+
+
+    <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+	document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+  
+</body>
+</html>

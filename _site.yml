@@ -1,11 +1,13 @@
-name: "MyLabJournal"
+name: "Cyclistic Bike-share Case Study"
 navbar:
-  title: "MyLabJournal"
+  title: "Cyclistic Bike-share Case Study"
   left:
-    - text: "Home"
+    - text: "Context"
       href: index.html
-    - text: "Journal"
-      href: Journal.html
-    - text: "Links"
-      href: Links.html
+    - text: "Final Report"
+      href: Final_report.html
+    - text: "Data Cleaning"
+      href: Data_cleaning.html
+    - text: "Code for Analysis"
+      href: Analysis_code.html
 output_dir: "docs"

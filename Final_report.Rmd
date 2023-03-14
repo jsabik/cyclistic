@@ -1,0 +1,18 @@
+---
+title: "Final Report"
+output: html_document
+---
+
+# Statement of Business Task
+
+Our task is to understand the usage characteristics of casual riders compared to annual members, so Cyclistic may develop marketing strategies that convert casual riders into annual members. As stated in the brief, growing the number of annual members will drive profit growth for Cyclistic.
+
+# Analysis
+
+# Recommendations
+
+# Data Sources
+
+Trip data was obtained directly from Divvy Bikes (<https://divvybikes.com/system-data>). This data is owned by the City of Chicago and is provided to the public according to the Divvy Data License Agreement (<https://ride.divvybikes.com/data-license-agreement>). The data is an exhaustive record of all trips taken through the Divvy bike-share system,and is released on a monthly basis. All trip data is anonymized.
+
+Additional GIS data was obtained from ESRI through the leaflet package for R, and is given attribution on all interactive maps.

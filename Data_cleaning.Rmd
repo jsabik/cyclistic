@@ -1,0 +1,224 @@
+---
+title: "Data Cleaning"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::downcute: 
+    self_contained: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(rmdformats)
+## Global options
+options(max.print="75")
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = NA,
+	prompt = FALSE,
+	results = TRUE
+)
+opts_knit$set(width=75)
+```
+
+# Cleaning process
+
+This page gives an outline of the process and assumptions used to combine, clean, and transform raw trip data from Cyclistic (Divvy) in preperation for analysis. At the time of collection, data up to October 2022 were available. For the purposes of our analysis, the 12 most recent months of data were selected.
+
+Cyclistic is a fictional company, but the data is obtained from Divvy Bikes, a real bike sharing program in Chicago, Il. A description of the datasets and their files [can be accessed here](https://divvybikes.com/system-data).
+
+# 1. Installing Packages
+
+```{r}
+#Tidyverse was used for data cleaning and analysis
+library(tidyverse)
+```
+
+# 2. Combining datasets
+
+The structure of these CSV files were inspected using Excel prior to import and binding. The structure of the merged dataset was checked again after binding.
+
+```{r, import, results='hide'}
+#Import data files
+nov21 <- read_csv("Data/202111-divvy-tripdata.csv")
+dec21 <- read_csv("Data/202112-divvy-tripdata.csv")
+jan22 <- read_csv("Data/202201-divvy-tripdata.csv")
+feb22 <- read_csv("Data/202202-divvy-tripdata.csv")
+mar22 <- read_csv("Data/202203-divvy-tripdata.csv")
+apr22 <- read_csv("Data/202204-divvy-tripdata.csv")
+may22 <- read_csv("Data/202205-divvy-tripdata.csv")
+jun22 <- read_csv("Data/202206-divvy-tripdata.csv")
+jul22 <- read_csv("Data/202207-divvy-tripdata.csv")
+aug22 <- read_csv("Data/202208-divvy-tripdata.csv")
+sep22 <- read_csv("Data/202209-divvy-tripdata.csv")
+oct22 <- read_csv("Data/202210-divvy-tripdata.csv")
+
+#Join data files
+all_rides <- bind_rows(nov21,dec21,jan22,feb22,mar22,apr22,may22,jun22,jul22,
+                      aug22,sep22,oct22)
+                      
+#delete import files and clear from memory
+rm(nov21,dec21,jan22,feb22,mar22,apr22,may22,jun22,jul22,aug22,sep22,oct22)
+gc()
+
+str(all_rides)
+
+```
+
+## 2.1 Assigning time zone
+  The datetime variables started_at and ended_at were both automatically imported as POSIXct data types. The following code assigns the Chicago timezone. Daylight Savings Time presented difficulties with a small number of rides that crossed over a DST boundary.
+  
+```{r}
+#Set time zone
+all_rides <- all_rides %>% 
+  mutate(started_at = force_tz(all_rides$started_at,
+                               tzone = "America/Chicago",
+                               roll_dst = c("pre", "post"))) %>% 
+  mutate(ended_at = force_tz(all_rides$ended_at,
+                             tzone = "America/Chicago",
+                             roll_dst = c("pre", "post")))
+#Confirm time zone is America/Chicago
+tz(all_rides$started_at)
+tz(all_rides$ended_at)
+```
+
+# 3. Data transformation
+
+## 3.1 Create a variable for the day of week
+
+Part of our analysis will examine which days of the week are most popular with different rider groups. Here we create a variable for the day of the week.
+
+```{r}
+weekday_levels <- c('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 
+                    'Friday', 'Saturday')
+all_rides <- all_rides %>% 
+  mutate(day_of_week = factor(weekdays(started_at), levels = weekday_levels))
+```
+
+## 3.2 Create a variable for the ride duration
+
+With the 'started_at' time and 'ended_at' time, we can calculate an interesting variable for analysis: the duration of each ride.
+
+```{r}
+#Create ride_length to measure duration of ride
+all_rides <- all_rides %>% 
+  mutate(ride_length = as.duration(started_at%--%ended_at))
+```
+
+## 3.3 Convert categorical variables to factors
+
+Our data has two categorical variables which can be better analyzed by assigning them as factors, 'rideable_type' and 'member_casual'.
+
+```{r}
+#Convert 'rideable_type' and 'member_casual' to factors
+all_rides <- all_rides %>% 
+  mutate(rideable_type = factor(rideable_type))
+all_rides <- all_rides %>% 
+  mutate(member_casual = factor(member_casual))
+```
+
+# 4. Examine data
+Before we clean our data, we will explore the data to look for errors, blanks, or any values out of range for our analysis.
+
+## 4.1 Examine primary key
+Our data has a primary key, which is the 'ride_id' variable. We will check the integrity of our data by ensuring that each 'ride_id' is unique.
+
+```{r}
+#Check if each trip_id is unique
+all_rides %>%
+  distinct(ride_id) %>% 
+  summarise(total_count=n(),.groups='drop') %>% 
+  arrange(-total_count)
+```
+
+The result, 5,755,694, is equal to the number of rows in all_rides. Each ride_id is unique.
+
+## 4.2 Invalid durations
+[Divvy's data page](https://divvybikes.com/system-data) states that "The data has been processed to remove trips that are taken by staff as they service and inspect the system; and any trips that were below 60 seconds in length (potentially false starts or users trying to re-dock a bike to ensure it was secure)." In reviewing our data, we see that the minimum value for duration was negative. Exploring the number of trips less than 60s finds the following.
+
+```{r}
+#Examine trip lenghts < 60s in duration
+all_rides %>%
+  filter(ride_length<60) %>% 
+  summarise(total_count=n(),.groups='drop') %>% 
+  arrange(-total_count)
+#118,453 ride_lentgh < 60s
+```
+
+## 4.3 Null values
+Our data should be complete, without any blank fields. The following code will count if there are any null values in our data.
+
+```{r}
+all_rides %>% 
+  summarise(across(everything(), ~ sum(is.na(.x))))
+```
+
+There are null values in start_station_name, start_station_id, end_station_name, end_station_id, end_lat, and end_lng.
+
+The number of null values for station names and ids is concerning. The nulls in the station variables account for 23.37% of our data. The end latitude and longitude are less concerning, accounting for <0.01% of the data.
+
+In an ideal situation, we could ask others who collect this data why parts of it are missing. For our case study, we will use publicly available information to fill in our understanding of the data.
+
+### 4.3(a) Null values in end_lat and end_lng
+
+```{r}
+#Isolate null values of 'end_lat' and 'end_lng' for analysis
+no_end_latlng <- all_rides %>% 
+  filter(is.na(end_lat) | is.na(end_lng))
+summary(no_end_latlng)
+
+head(no_end_latlng)
+```
+
+Micromobility devices, which include bikes and scooters, are not always returned. There are [several documented instances of Divvy bikes found out of place](https://blockclubchicago.org/2022/10/04/how-did-this-chicago-divvy-bike-end-up-in-mexico-its-unclear-but-cant-blame-this-bike-for-heading-south/), some as far as Michoacan, Mexico. Nearly all of these rows have a ride duration of approximately 24 hours. After 24 hours, [Divvy considers a bike to be lost or stolen, and assesses a fee.](https://help.divvybikes.com/hc/en-us/articles/360033123412-My-bike-was-lost-or-stolen) For the purpose of this analysis, we will assume that any trip without an end_lat and end_lng is missing or stolen, and exclude those rides from this analysis.
+
+### 4.3(b) Null station name and id
+Let's examine the station names and ids. If we isolate and analyze these rows, we see that their start and stop latitude and longitude variables are rounded to two place values, as opposed to rides with station names and ids, which continue to four decimal places.
+```{r}
+no_station <- all_rides %>% 
+  filter(is.na(start_station_name) | is.na(end_station_name))
+
+head(no_station)
+```
+
+What if these rides do not start or end at a station, because they are not required to? A search of available information finds that in 2020, Divvy began [introducing dockless bikes as part of their system](https://divvybikes.com/explore-chicago/expansion-temp). This would explain why the latitude and longitude are truncated -- to anonymize user data. For the purpose of this analysis, we will assume that rides with null values in the station name and id fields were dockless rides.
+
+## 4.4 Rides over 24 hours
+As discovered in section 4.3(a), Divvy considers any bike lost for more than 24 hours to be lost or stolen. There are 278 rides in our data set with durations greater than 24 hours. For the purpose of this analysis, they will be excluded.
+```{r}
+all_rides %>% 
+  filter(ride_length >= (24*60*60)) %>%
+  filter(!is.na(end_lat) | !is.na(end_lng)) %>% 
+  summarize(count=n())
+```
+
+# 5. Cleaning data
+After a through exploration of the data, it can be efficiently filtered and cleaned. 
+
+```{r}
+valid_rides <- all_rides %>% 
+  filter(ride_length >= 60) %>% 
+  filter(ride_length < (24*60*60)) %>% 
+  filter(!is.na(end_lat) | !is.na(end_lng)) %>% 
+  mutate(start_station_name = replace_na(start_station_name, "Dockless")) %>% 
+  mutate(start_station_id = replace_na(start_station_id, "No ID")) %>% 
+  mutate(end_station_name = replace_na(end_station_name, "Dockless")) %>% 
+  mutate(end_station_id = replace_na(end_station_id, "No ID"))
+
+summary(valid_rides)
+str(valid_rides)
+```
+
+Our cleaning process removed 124,562 rows from our data set: 118,453 rides were less than 60s, 5,377 rides were greater than 24h, and 5,835 had null values for end_lat and end_lng. There is significant overlap between the latter two categories.
+
+**Saving the cleaned data**
+
+
+The following code exports the data as a csv file for later analysis.
+
+```{r}
+write.csv(all_rides,"Data/valid_rides.csv", row.names = FALSE)
+write.csv(valid_rides,"Data/valid_rides.csv", row.names = FALSE)
+```
+
