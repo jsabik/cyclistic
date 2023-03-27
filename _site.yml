@@ -4,11 +4,11 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "Final Report"
-      href: Final_report.html
     - text: "Data Cleaning"
       href: Data_cleaning.html
-    - text: "Code for Analysis"
+    - text: "Data Analysis"
       href: Analysis_code.html
+    - text: "Final Report"
+      href: Final_report.html
       
 output_dir: "docs"

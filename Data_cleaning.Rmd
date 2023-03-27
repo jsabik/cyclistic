@@ -1,6 +1,6 @@
 ---
 title: <br>"Data Cleaning"
-date: 'r Sys.Date()'
+date: "r Sys.Date()"
 output:
   rmdformats::downcute: 
     self_contained: true
@@ -31,8 +31,7 @@ Cyclistic is a fictional company, but the data is obtained from Divvy Bikes, a r
 # 1. Installing Packages
 
 ```{r}
-#Tidyverse was used for data cleaning and analysis
-library(tidyverse)
+library(tidyverse) #For data cleaning and analysis
 ```
 
 # 2. Combining datasets
@@ -198,9 +197,9 @@ After a through exploration of the data, it can be efficiently filtered and clea
 
 ```{r}
 valid_rides <- all_rides %>% 
-  filter(ride_length >= 60) %>% 
-  filter(ride_length < (24*60*60)) %>% 
-  filter(!is.na(end_lat) | !is.na(end_lng)) %>% 
+  filter(ride_length >= 60) %>% #Rides < 60s are not valid trips (per Divvy)
+  filter(ride_length < (24*60*60)) %>% #Rides > 24h are lost/stolen
+  filter(!is.na(end_lat) | !is.na(end_lng)) %>%  #Null end position
   mutate(start_station_name = replace_na(start_station_name, "Dockless")) %>% 
   mutate(start_station_id = replace_na(start_station_id, "No ID")) %>% 
   mutate(end_station_name = replace_na(end_station_name, "Dockless")) %>% 
@@ -212,13 +211,25 @@ str(valid_rides)
 
 Our cleaning process removed 124,562 rows from our data set: 118,453 rides were less than 60s, 5,377 rides were greater than 24h, and 5,835 had null values for end_lat and end_lng. There is significant overlap between the latter two categories.
 
+# 6. Removing test data found during analysis
+
+During geospatial analysis, a record with out of range data for the start_lat and start_lng was located. Upon further inspection, the start_station_name was identified as "Pawel Bialowas -  Test - PBSC charging station". The following code removes any record with the word "test" in either the start station or end station name.
+
+```{r}
+# Subset the valid_rides data frame to exclude rows where start_station_name or end_station_name contains "test"
+valid_rides <- valid_rides[!(grepl("test", valid_rides$start_station_name, ignore.case = TRUE) | 
+                             grepl("test", valid_rides$end_station_name, ignore.case = TRUE)),]
+
+```
+
+One record was removed because it contained the word "test" in one of the station name variables.
+
 **Saving the cleaned data**
 
 
-The following code exports the data as a csv file for later analysis.
+The following code exports the data as an RDS file for later analysis.
 
 ```{r}
-write.csv(all_rides,"Data/all_rides.csv", row.names = FALSE)
-write.csv(valid_rides,"Data/valid_rides.csv", row.names = FALSE)
+saveRDS(all_rides,"Data/all_rides.RDS")
+saveRDS(valid_rides, "Data/valid_rides.RDS")
 ```
-

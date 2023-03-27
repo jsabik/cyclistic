@@ -1,6 +1,6 @@
 ---
-title: "Cyclistic Case Study" 
-date: 'r Sys.Date()'
+title: <br> "Cyclistic Case Study" 
+date: "r Sys.Date()"
 output:
   rmdformats::downcute: 
     self_contained: true

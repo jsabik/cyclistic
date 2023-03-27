@@ -1,0 +1,65 @@
+---
+title: "map"
+author: "Joshua Sabik"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(leaflet.extras)
+library(leafgl)
+```
+
+```{r map, include=FALSE}
+valid_rides <- readRDS("Data/valid_rides.RDS")
+
+member_endlatlng <- valid_rides %>%
+  filter(member_casual == 'member') %>% 
+  select(end_lat, end_lng)
+member_endlatlng_pts <- st_as_sf(member_endlatlng,
+                                 coords = c("end_lng", "end_lat"), crs = 4326)
+
+casual_endlatlng <- valid_rides %>%
+  filter(member_casual == 'casual') %>% 
+  select(end_lat, end_lng)
+casual_endlatlng_pts <- st_as_sf(casual_endlatlng,
+                                 coords = c("end_lng", "end_lat"), crs = 4326)
+
+member_startlatlng <- valid_rides %>%
+  filter(member_casual == 'member') %>% 
+  select(start_lat, start_lng)
+member_startlatlng_pts <- st_as_sf(member_startlatlng,
+                                 coords = c("start_lng", "start_lat"), crs = 4326)
+
+casual_startlatlng <- valid_rides %>%
+  filter(member_casual == 'casual') %>% 
+  select(start_lat, start_lng)
+casual_startlatlng_pts <- st_as_sf(casual_startlatlng,
+                                 coords = c("start_lng", "start_lat"), crs = 4326)
+
+endlatlng <- valid_rides %>%
+  select(end_lat, end_lng, member_casual)
+endlatlng_pointmap_gl <- endlatlng %>% 
+  leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
+  addProviderTiles("Esri.WorldGrayCanvas", 
+                   options = providerTileOptions(pdateWhenZooming = FALSE, 
+                                                 updateWhenIdle = TRUE)) %>%
+  setView(lng = -87.65, lat = 41.9, zoom = 10) %>%
+  addGlPoints(data = member_endlatlng_pts, fillColor = "#4e7dcc", 
+              radius = 4, fillOpacity = 0.9, group = "Member (End Station)") %>% 
+  addGlPoints(data = casual_endlatlng_pts, fillColor = "#c65e57", 
+              fillOpacity = 0.9, radius = 4, group = "Casual (End Station)") %>%
+  addGlPoints(data = member_startlatlng_pts, fillColor = "#619CFF", 
+              radius = 4, fillOpacity = 0.9, group = "Member (Start Station)") %>% 
+  addGlPoints(data = casual_startlatlng_pts, fillColor = "#F8766D", 
+              fillOpacity = 0.9, radius = 4, group = "Casual (Start Station)") %>%
+  addLayersControl(
+    overlayGroups = c("Member (Start Station)", "Casual (Start Station)",
+                      "Member (End Station)", "Casual (End Station)"),
+    options = layersControlOptions(collapsed = FALSE))
+endlatlng_pointmap_gl
+```

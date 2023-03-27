@@ -1,30 +1,230 @@
 ---
-title: <br> "Code for Analysis"
-author: "Joshua Sabik"
-date: "`r Sys.Date()`"
-output: html_document
+title: <br> "Data Analysis"
+date: "r Sys.Date()"
+output:
+  rmdformats::downcute: 
+    self_contained: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(rmdformats)
+## Global options
+options(max.print="75")
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = TRUE, #REVERT LATER
+	warning = TRUE, #REVERT LATER
+	comment = NA,
+	prompt = FALSE,
+	results = TRUE
+)
+opts_knit$set(width=75)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+# 1. Load Packages
+```{r, results= FALSE}
+library(tidyverse)
+library(DT)
+library(moments)
+library(sf)
+library(leaflet)
+library(leaflet.extras)
+library(leafgl)
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+# 2. Import Cleaned Data
+```{r, results= FALSE}
+valid_rides <- readRDS("Data/valid_rides.RDS")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+# 3. Ride origins and destinations
+```{r, eval = FALSE}
+#Data needs to be binned https://search.r-project.org/CRAN/refmans/leaflet.extras2/html/addHexbin.html
+
+member_endlatlng <- valid_rides %>%
+  filter(member_casual == 'member') %>% 
+  select(end_lat, end_lng)
+member_endlatlng_pts <- st_as_sf(member_endlatlng,
+                                 coords = c("end_lng", "end_lat"), crs = 4326)
+
+casual_endlatlng <- valid_rides %>%
+  filter(member_casual == 'casual') %>% 
+  select(end_lat, end_lng)
+casual_endlatlng_pts <- st_as_sf(casual_endlatlng,
+                                 coords = c("end_lng", "end_lat"), crs = 4326)
+
+member_startlatlng <- valid_rides %>%
+  filter(member_casual == 'member') %>% 
+  select(start_lat, start_lng)
+member_startlatlng_pts <- st_as_sf(member_startlatlng,
+                                 coords = c("start_lng", "start_lat"), crs = 4326)
+
+casual_startlatlng <- valid_rides %>%
+  filter(member_casual == 'casual') %>% 
+  select(start_lat, start_lng)
+casual_startlatlng_pts <- st_as_sf(casual_startlatlng,
+                                 coords = c("start_lng", "start_lat"), crs = 4326)
+
+endlatlng <- valid_rides %>%
+  select(end_lat, end_lng, member_casual)
+endlatlng_pointmap_gl <- endlatlng %>% 
+  leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
+  addProviderTiles("Esri.WorldGrayCanvas", 
+                   options = providerTileOptions(pdateWhenZooming = FALSE, 
+                                                 updateWhenIdle = TRUE)) %>%
+  setView(lng = -87.65, lat = 41.9, zoom = 10) %>%
+  addGlPoints(data = member_endlatlng_pts, fillColor = "#4e7dcc", 
+              radius = 4, fillOpacity = 0.9, group = "Member (End Station)") %>% 
+  addGlPoints(data = casual_endlatlng_pts, fillColor = "#c65e57", 
+              fillOpacity = 0.9, radius = 4, group = "Casual (End Station)") %>%
+  addGlPoints(data = member_startlatlng_pts, fillColor = "#619CFF", 
+              radius = 4, fillOpacity = 0.9, group = "Member (Start Station)") %>% 
+  addGlPoints(data = casual_startlatlng_pts, fillColor = "#F8766D", 
+              fillOpacity = 0.9, radius = 4, group = "Casual (Start Station)") %>%
+  addLayersControl(
+    overlayGroups = c("Member (Start Station)", "Casual (Start Station)",
+                      "Member (End Station)", "Casual (End Station)"),
+    options = layersControlOptions(collapsed = FALSE))
+endlatlng_pointmap_gl
+```
+
+```{r}
+#Top Stations (Start)
+start_station_rank <- valid_rides %>% 
+  select(station_name = start_station_name, member_casual) %>%
+  group_by(member_casual) %>% 
+  count(station_name) %>%
+  pivot_wider(names_from = member_casual, values_from = n)
+
+#Top Stations (End)
+end_station_rank <- valid_rides %>% 
+  select(station_name = end_station_name, member_casual) %>%
+  group_by(member_casual) %>% 
+  count(station_name) %>%
+  pivot_wider(names_from = member_casual, values_from = n) 
+
+#Top Stations (Combined)
+all_station_rank <- full_join(start_station_rank, end_station_rank, by = "station_name") %>%
+  mutate(total_start=casual.x + member.x) %>% 
+  mutate(total_end=casual.y + member.y) %>% 
+  rename(casual_start = casual.x) %>% 
+  arrange(desc(total_start+total_end))
+
+datatable(all_station_rank, colnames = c("Rank","Location", "Origin (Casual)", "Origin (Member)", 
+                                         "Destination (Casual)",
+                                         "Destination (Member)",
+                                         "Origin (Total)", 
+                                         "Destination (Total)"))
+```
+# 4. Seasonal ridership patterns
+```{r}
+year_table <- valid_rides %>%
+  select(started_at, member_casual) %>% 
+  group_by(member_casual) %>% 
+  count(date = date(started_at)) %>% 
+  arrange(-n)
+
+year_plot <- ggplot(year_table, mapping = aes(x = date, y = n, color = member_casual)) +
+  geom_point() +
+  geom_smooth() +
+  scale_x_date(date_labels = "%b")+
+  labs(x = "Date", y = "Number of Daily Rides",
+       title = "Seasonal Variation in Ridership", 
+       caption = "From Nov 2021 to Oct 2022")
+year_plot
+```
+
+```{r}
+month_table <- xtabs(~member_casual+month(valid_rides$started_at), data=valid_rides)
+colnames(month_table) <- month.name
+prop_month_table <- prop.table(month_table)
+prop_month_table <- round(prop_month_table, 3)
+prop_month_table <- addmargins(prop_month_table)
+prop_month_table
+```
+
+# 5. Rides by day of the week
+```{r}
+week_plot <- ggplot(valid_rides, aes(fill = member_casual, x = day_of_week))+
+  geom_bar(position = "dodge", stat = "count") +
+  scale_y_continuous(labels = scales::label_number())+
+  labs(y = "Total Rides", x = "Day of the Week", 
+       title = "Ridership by Day of the Week", 
+       caption = "From Nov 2021 to Oct 2022")
+
+week_plot
+```
+
+```{r}
+day_table <- xtabs(~member_casual+day_of_week, data=valid_rides)
+prop_day_table <- prop.table(day_table)
+prop_day_table <- round(prop_day_table, 3)
+prop_day_table <- addmargins(prop_day_table)
+prop_day_table
+```
+# 6. Rides by time of Day
+```{r}
+day_plot <- ggplot(valid_rides) +
+  geom_histogram(mapping = aes(x=hour(started_at), fill = member_casual),
+                 binwidth = 1)+
+  scale_y_continuous(labels = scales::label_number_si())+
+  labs(x = "Hour (Local)", y = "Number of Rides",
+       title = "Hourly Ride Frequency by Rider Segment", 
+       caption = "From Nov 2021 to Oct 2022") +
+  guides(fill = 'none') +
+  facet_wrap(~member_casual)
+day_plot
+```
+
+```{r}
+hour_table <- xtabs(~member_casual+format(started_at, "%H"), data=valid_rides)
+prop_hour_table <- prop.table(hour_table)
+prop_hour_table <- round(prop_hour_table, 3)
+prop_hour_table <- addmargins(prop_hour_table)
+prop_hour_table
+```
+# 7. Ride duration
+```{r}
+duration_histogram <- ggplot(valid_rides, aes(ride_length, fill = member_casual)) +
+  geom_histogram(binwidth = 180) +
+  xlim(0,3600) +
+  scale_y_continuous(labels  = scales::label_number_si())+
+  labs(x = "Ride Duration (seconds)", y = "Number of Rides",
+       title = "Ride Duration by Customer Segment", 
+       caption = "From Nov 2021 to Oct 2022") +
+  facet_wrap(~member_casual)
+duration_histogram
+```
+
+```{r}
+duration_table <- valid_rides %>%
+  group_by(member_casual) %>% 
+  summarize(mean = as.duration(mean(ride_length)), 
+            std_dev = sd(ride_length), 
+            q1 = quantile(ride_length, 0.25),
+            median = as.duration(median(as.numeric(ride_length))),
+            q3 = quantile(ride_length, 0.75),
+            IQR = as.duration(IQR(ride_length)),
+            skewness = skewness(ride_length),
+            kurtosis = kurtosis(ride_length))
+duration_table
+```
+
+# N. Rideable Type
+```{r}
+rideable_df <- valid_rides %>% 
+  group_by(member_casual, rideable_type) %>% 
+  count(rideable_type)
+
+rideable_plot <- ggplot(rideable_df) +
+  geom_col(mapping = aes(x = member_casual, y = n, fill = rideable_type), position = 
+             "Fill") + 
+  labs(x = "Customer Segment", y = "Percent of Rides",
+       title = "Share of Rides by Bicycle Type", caption = "From Nov 2021 to Oct 2022") +
+  scale_fill_discrete(name = "Bicycle Type",
+                      labels = c("Classic", "Docked", "Electric")) +
+  scale_y_continuous(name=waiver(), labels = scales::percent) +
+  coord_flip()
+rideable_plot
+```

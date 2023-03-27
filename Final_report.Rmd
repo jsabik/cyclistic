@@ -1,6 +1,6 @@
 ---
 title: <br> "Final Report"
-date: 'r Sys.Date()'
+date: "r Sys.Date()"
 output:
   rmdformats::downcute: 
     self_contained: true
@@ -12,7 +12,7 @@ library(rmdformats)
 ## Global options
 options(max.print="75")
 knitr::opts_chunk$set(
-	echo = TRUE,
+	echo = FALSE,
 	message = FALSE,
 	warning = FALSE,
 	comment = NA,
@@ -22,16 +22,21 @@ knitr::opts_chunk$set(
 opts_knit$set(width=75)
 ```
 
-# Statement of Business Task
+# 1. Executive summary
 
 Our task is to understand the usage characteristics of casual riders compared to annual members, so Cyclistic may develop marketing strategies that convert casual riders into annual members. As stated in the brief, growing the number of annual members will drive profit growth for Cyclistic.
 
-# Analysis
+# 2. Data preperation
 
-# Recommendations
+# 3. Analysis
+## 3.1 Ride origins and destinations
 
-# Data Sources
 
-Trip data was obtained directly from Divvy Bikes (<https://divvybikes.com/system-data>). This data is owned by the City of Chicago and is provided to the public according to the Divvy Data License Agreement (<https://ride.divvybikes.com/data-license-agreement>). The data is an exhaustive record of all trips taken through the Divvy bike-share system,and is released on a monthly basis. All trip data is anonymized.
 
-Additional GIS data was obtained from ESRI through the leaflet package for R, and is given attribution on all interactive maps.
+# 4. Recommendations
+
+# 5. Data Sources
+
+Trip data was obtained directly from [Divvy Bikes](https://divvybikes.com/system-data). This data is owned by the City of Chicago and is provided to the public according to the [Divvy Data License Agreement](https://ride.divvybikes.com/data-license-agreement). The data is an exhaustive record of all trips taken through the Divvy bike-share system,and is released on a monthly basis. All trip data is anonymized.
+
+Additional GIS data was obtained from ESRI through the leaflet package for R, and is given attribution on all applicable maps.
