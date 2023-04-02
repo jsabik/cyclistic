@@ -1,350 +1,1906 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="generator" content="pandoc" />
 
-<html>
+    
+        <meta name="date" content="2023-04-02" />
+    
+    <title>  Final Report</title>
 
-<head>
+        <script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+        <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="site_libs/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+        <script src="site_libs/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+        <script src="site_libs/navigation-1.1/tabsets.js"></script>
+        <link href="site_libs/downcute-0.1/downcute.css" rel="stylesheet" />
+        <link href="site_libs/downcute-0.1/downcute_fonts_embed.css" rel="stylesheet" />
+        <script src="site_libs/downcute-0.1/downcute_styles.js"></script>
+        <script src="site_libs/downcute-0.1/downcute.js"></script>
+        <script src="site_libs/prism-1.22/prism.js"></script>
+    
+    
+    
+    
+    <!-- tabsets -->
+    <script>
+      $(document).ready(function () {
+	  window.buildTabsets("toc");
+      });
+      $(document).ready(function () {
+	  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+	      $(this).parent().toggleClass('nav-tabs-open')
+	  });
+      });
+    </script>
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+    <!-- code folding -->
+    
+    <!-- code download -->
+    
+    <!-- tabsets dropdown -->
 
+    <style type="text/css">
+      .tabset-dropdown > .nav-tabs {
+	  display: inline-table;
+	  max-height: 500px;
+	  min-height: 44px;
+	  overflow-y: auto;
+	  background: white;
+	  border: 1px solid #ddd;
+	  border-radius: 4px;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li.active:before {
+	  content: "";
+	  font-family: 'Glyphicons Halflings';
+	  display: inline-block;
+	  padding: 10px;
+	  border-right: 1px solid #ddd;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+	  content: "&#xe258;";
+	  border: none;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+	  content: "";
+	  font-family: 'Glyphicons Halflings';
+	  display: inline-block;
+	  padding: 10px;
+	  border-right: 1px solid #ddd;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li.active {
+	  display: block;
+      }
 
+      .tabset-dropdown > .nav-tabs > li.active a {
+  	  padding: 0 15px !important;
+      }
 
-
-<title>Final Report</title>
-
-<script src="site_libs/header-attrs-2.19/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
-<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
+      .tabset-dropdown > .nav-tabs > li > a,
+      .tabset-dropdown > .nav-tabs > li > a:focus,
+      .tabset-dropdown > .nav-tabs > li > a:hover {
+	  border: none;
+	  display: inline-block;
+	  border-radius: 4px;
+	  background-color: transparent;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+	  display: block;
+	  float: none;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li {
+	  display: none;
+	  margin-left: 0 !important;
+      }
     </style>
-
-<style type="text/css">code{white-space: pre;}</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
-}
-</script>
-
-
-
-
-
-
-
-
-
-<style type = "text/css">
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-img {
-  max-width:100%;
-}
-.tabbed-pane {
-  padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
-}
-button.code-folding-btn:focus {
-  outline: none;
-}
-summary {
-  display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
-}
-pre code {
-  padding: 0;
-}
-</style>
-
-
-<style type="text/css">
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu>.dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-  display: block;
-}
-.dropdown-submenu>a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #cccccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover>a:after {
-  border-left-color: #adb5bd;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 6px 0 6px 6px;
-}
-</style>
-
-<script type="text/javascript">
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
-
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
-  }
-
-  // Navbar adjustments
-  var navHeight = $(".navbar").first().height() + 15;
-  var style = document.createElement('style');
-  var pt = "padding-top: " + navHeight + "px; ";
-  var mt = "margin-top: -" + navHeight + "px; ";
-  var css = "";
-  // offset scroll position for anchor links (for fixed navbar)
-  for (var i = 1; i <= 6; i++) {
-    css += ".section h" + i + "{ " + pt + mt + "}\n";
-  }
-  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
-  document.head.appendChild(style);
-});
-</script>
-
-<!-- tabsets -->
-
-<style type="text/css">
-.tabset-dropdown > .nav-tabs {
-  display: inline-table;
-  max-height: 500px;
-  min-height: 44px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "\e259";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "\e258";
-  font-family: 'Glyphicons Halflings';
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs > li.active {
-  display: block;
-}
-
-.tabset-dropdown > .nav-tabs > li > a,
-.tabset-dropdown > .nav-tabs > li > a:focus,
-.tabset-dropdown > .nav-tabs > li > a:hover {
-  border: none;
-  display: inline-block;
-  border-radius: 4px;
-  background-color: transparent;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
-  display: block;
-  float: none;
-}
-
-.tabset-dropdown > .nav-tabs > li {
-  display: none;
-}
-</style>
-
-<!-- code folding -->
-
-
-
-
+    
 </head>
 
-<body>
+<body class="preload">
 
-
-<div class="container-fluid main-container">
-
-
-
-
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">Cyclistic Bike-share Case Study</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li>
-  <a href="index.html">Context</a>
-</li>
-<li>
-  <a href="Final_report.html">Final Report</a>
-</li>
-<li>
-  <a href="Data_cleaning.html">Data Cleaning</a>
-</li>
-<li>
-  <a href="Analysis_code.html">Code for Analysis</a>
-</li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
+   	
+               <!-- downcute start -->   
+   <div id="docute" class="Root theme-default">
+     <div class="Page layout-narrow">
+      <div class="Wrap">
+        <div class="Sidebar">
+          <div class="SidebarItems" id="toc">
+            <ul>
+            <li><a href="#executive-summary"
+            id="toc-executive-summary">1. Executive summary</a></li>
+            <li><a href="#data-preparation" id="toc-data-preparation">2.
+            Data preparation</a></li>
+            <li><a href="#analysis" id="toc-analysis">3. Analysis</a>
+            <ul>
+            <li><a
+            href="#seasonal-variations-in-casual-and-member-ridership"
+            id="toc-seasonal-variations-in-casual-and-member-ridership">3.1
+            Seasonal variations in casual and member ridership</a></li>
+            <li><a href="#casual-and-member-ridership-by-day-of-week"
+            id="toc-casual-and-member-ridership-by-day-of-week">3.2
+            Casual and member ridership by day of week</a></li>
+            <li><a href="#ridership-by-time-of-day"
+            id="toc-ridership-by-time-of-day">3.3 Ridership by time of
+            day</a></li>
+            <li><a href="#ride-duration" id="toc-ride-duration">3.4 Ride
+            Duration</a></li>
+            <li><a href="#rideable-type" id="toc-rideable-type">3.5
+            Rideable Type</a></li>
+            <li><a href="#top-10-stations-for-casual-riders-vs-members"
+            id="toc-top-10-stations-for-casual-riders-vs-members">3.6
+            Top 10 stations for casual riders vs members</a></li>
+            </ul></li>
+            <li><a href="#recommendations" id="toc-recommendations">4.
+            Recommendations</a>
+            <ul>
+            <li><a
+            href="#highlight-the-value-of-cyclistic-membership-through-transactional-e-mails"
+            id="toc-highlight-the-value-of-cyclistic-membership-through-transactional-e-mails">4.1
+            Highlight the value of Cyclistic membership through
+            transactional e-mails</a></li>
+            <li><a
+            href="#promote-cyclistic-as-a-way-to-access-events-and-activities"
+            id="toc-promote-cyclistic-as-a-way-to-access-events-and-activities">4.2
+            Promote Cyclistic as a way to access events and
+            activities</a></li>
+            <li><a href="#raise-awareness-of-cycling-infrastructure"
+            id="toc-raise-awareness-of-cycling-infrastructure">4.3 Raise
+            Awareness of Cycling Infrastructure</a></li>
+            </ul></li>
+            </ul>
+          </div>
+          <div data-position="sidebar:post-end" class="InjectedComponents"><div class="dark-theme-toggler"><div class="toggle "><div class="toggle-track"><div class="toggle-track-check"><img  src="data:image/png;base64,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" role="presentation" style="pointer-events: none;" width="16" height="16"></div> <div class="toggle-track-x"><img src="data:image/png;base64,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" role="presentation" style="pointer-events: none;" width="16" height="16"></div></div> <div class="toggle-thumb"></div></div> <input type="checkbox" aria-label="Switch between Dark and Default theme" class="toggler-screen-reader-only"></div></div>
+        </div>
+        <div class="Main">
+          <div class="Content" id="content"> 
+   
+   
+      
+      <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">Cyclistic Case Study</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li>
+        <a href="index.html">Home</a>
+      </li>
+      <li>
+        <a href="Final_report.html">Final Report</a>
+      </li>
+      <li>
+        <a href="Data_cleaning.html">Data Cleaning</a>
+      </li>
+      <li>
+        <a href="Analysis_code.html">Data Analysis</a>
+      </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container -->
+      </div><!--/.navbar -->
         
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
+      <h1 class="title"><br> Final Report</h1>
+      
+      <p class="authors">
+         <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2023-04-02</p>
+           
 
-<div id="header">
-
-
-
-<h1 class="title toc-ignore">Final Report</h1>
-
+   
+      
+   
+<!-- Don't indent these lines or it will mess pre blocks indentation --> 
+<div class="page-content has-page-title">
+<div id="executive-summary" class="section level1">
+<h1>1. Executive summary</h1>
+<p>This analysis examines the usage characteristics of casual riders
+compared to annual members in order to develop marketing strategies that
+convert casual riders into annual members. Cyclistic’s finance analysts
+have concluded that annual members are much more profitable than casual
+riders. Cyclistic believes that maximizing the number of annual members
+will be key to future growth. This analysis concludes that casual riders
+are more likely than members to ride on evenings, weekends, and warmer
+months, to use electric bikes, and take longer rides. Recommendations
+drawn from the data include: transactional e-mails for casual riders to
+see the lower trip price for members, a digital campaign highlighting
+events and activities accessible via Cyclistic bikes, and a digital
+campaign to expand user awareness of comfortable cycling paths and
+related points of interest.</p>
 </div>
-
-
-<div id="statement-of-business-task" class="section level1">
-<h1>Statement of Business Task</h1>
-<p>Our task is to understand the usage characteristics of casual riders
-compared to annual members, so Cyclistic may develop marketing
-strategies that convert casual riders into annual members. As stated in
-the brief, growing the number of annual members will drive profit growth
-for Cyclistic.</p>
+<div id="data-preparation" class="section level1">
+<h1>2. Data preparation</h1>
+<p>Cyclistic provided a month by month record of all past trips. For
+this analysis, data from November 2021 to October 2022 will be analyzed.
+Trip data was obtained directly from <a
+href="https://divvybikes.com/system-data">Divvy Bikes</a>. This data is
+owned by the City of Chicago and is provided to the public according to
+the <a href="https://ride.divvybikes.com/data-license-agreement">Divvy
+Data License Agreement</a>.</p>
+<p>There are roughly 100,000 - 500,000 trip records in each month’s CSV
+file. Due to the size of the data files, R Studio Desktop was used to
+clean and process the data. This structured data is automatically
+generated from each trip, and consequentially has very low possibility
+of human bias or error. The trip data is anonymized, and contains no
+identifiable user information.</p>
+<p>The twelve monthly CSV data sets were merged into one R data frame.
+Trips with a duration less than 60 seconds were omitted from the
+analysis. According to the data source, trips below 60 seconds should be
+omitted due to the likelihood that it represents <a
+href="https://divvybikes.com/system-data">“potential false starts or
+users trying to re-dock a bike to ensure it was secure.”</a> One record
+was identified as a test, and was omitted from analysis. Records with
+trip durations greater than 24 hours were omitted A detailed description
+of the data cleaning process is documented under <a
+href="/data_cleaning">“Data Cleaning Process”</a></p>
+<p>The data cleaning process identified a significant number of null
+values in station name and station ID. These records were observed to
+have rounded values for starting and ending latitude and longitudes,
+which would be consistent with protecting identifiable user information.
+A search of publicly available information found that in 2020, Divvy
+began <a
+href="https://divvybikes.com/explore-chicago/expansion-temp">introducing
+dockless bikes as part of their system</a>. As a dockless ride would not
+need to start or end at a station, and there were no other indications
+for dockless rides, it was inferred that these missing values
+represented dockless rides. Additional analysis found that all rides
+with missing station names and station IDs, rides with null values for
+latitude or longitude, were omitted from the analysis.</p>
+<p>The cleaned dataset was saved as an RDS file named
+“valid_rides.rds”.</p>
 </div>
 <div id="analysis" class="section level1">
-<h1>Analysis</h1>
+<h1>3. Analysis</h1>
+<div id="seasonal-variations-in-casual-and-member-ridership"
+class="section level2">
+<h2>3.1 Seasonal variations in casual and member ridership</h2>
+<p><img src="Final_report_files/figure-html/unnamed-chunk-3-1.png" width="768" /></p>
+<p>This scatter plot shows the relationship between each date in the
+data set, and the total number of trips by members and casual riders on
+each date. The trend line is calculated using LOESS (locally estimated
+scatter plot smoothing), and shows an approximation of a sinusoidal
+function.</p>
+<ul>
+<li><p>The data shows maximum ridership in the warmer summer months, and
+minimum ridership in the colder winter months.</p></li>
+<li><p>The data also shows a greater amount of variation for both
+members and casual riders in the summer months compared to the winter
+months.</p></li>
+<li><p>The data reinforces the existing understanding that Cyclistic
+users are more likely to ride for pleasure, but 30% use them to commute,
+as commuters would continue to ride to work throughout the year. It
+suggests that casual riders are less likely to use Cyclistic to commute
+than members, using Cyclistic primarily for pleasure.</p></li>
+</ul>
+<p>The increased intra-seasonal variation in the warm months could be
+due to fluctuations in weather or increased demand for events, which
+could be a topic for further analysis. It may be beneficial to
+prioritize marketing activities during the warmer months to engage with
+and convert a greater number of casual riders.</p>
+</div>
+<div id="casual-and-member-ridership-by-day-of-week"
+class="section level2">
+<h2>3.2 Casual and member ridership by day of week</h2>
+<p><img src="Final_report_files/figure-html/unnamed-chunk-4-1.png" width="768" /></p>
+<p>The bar graph above shows the total number of rides taken by casual
+riders and members, broken down by day of the week. Casual riders are
+more active on the weekends, while members are more active on weekdays.
+This data shows again that casual riders are less likely than members to
+use Cyclistic to commute, and primarily use Cyclistic for pleasure.</p>
+</div>
+<div id="ridership-by-time-of-day" class="section level2">
+<h2>3.3 Ridership by time of day</h2>
+<p><img src="Final_report_files/figure-html/unnamed-chunk-5-1.png" width="768" /></p>
+<p>The histograms above show the number of rides for each hour of the
+day for casual riders and members. Both histograms show the lowest
+number of rides in the early morning, around 3:00 or 4:00 A.M., and the
+highest number of rides in the evening, around 5:00 P.M. The histogram
+for member rides shows a smaller, but distinct peak around 8:00 A.M.</p>
+</div>
+<div id="ride-duration" class="section level2">
+<h2>3.4 Ride Duration</h2>
+<p><img src="Final_report_files/figure-html/unnamed-chunk-6-1.png" width="768" /></p>
+<p>These histograms show the duration of each ride, grouped into
+segments of 3 minutes each. Both histograms show left skewness and a
+peak in the 3-6 minute range.</p>
+<div id="gmciexpdyn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gmciexpdyn table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#gmciexpdyn thead, #gmciexpdyn tbody, #gmciexpdyn tfoot, #gmciexpdyn tr, #gmciexpdyn td, #gmciexpdyn th {
+  border-style: none;
+}
+
+#gmciexpdyn p {
+  margin: 0;
+  padding: 0;
+}
+
+#gmciexpdyn .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#gmciexpdyn .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#gmciexpdyn .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#gmciexpdyn .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#gmciexpdyn .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#gmciexpdyn .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gmciexpdyn .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#gmciexpdyn .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#gmciexpdyn .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#gmciexpdyn .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#gmciexpdyn .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#gmciexpdyn .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#gmciexpdyn .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#gmciexpdyn .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#gmciexpdyn .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#gmciexpdyn .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#gmciexpdyn .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#gmciexpdyn .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#gmciexpdyn .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gmciexpdyn .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#gmciexpdyn .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#gmciexpdyn .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#gmciexpdyn .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gmciexpdyn .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#gmciexpdyn .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#gmciexpdyn .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gmciexpdyn .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gmciexpdyn .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#gmciexpdyn .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gmciexpdyn .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#gmciexpdyn .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gmciexpdyn .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#gmciexpdyn .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gmciexpdyn .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#gmciexpdyn .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gmciexpdyn .gt_left {
+  text-align: left;
+}
+
+#gmciexpdyn .gt_center {
+  text-align: center;
+}
+
+#gmciexpdyn .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#gmciexpdyn .gt_font_normal {
+  font-weight: normal;
+}
+
+#gmciexpdyn .gt_font_bold {
+  font-weight: bold;
+}
+
+#gmciexpdyn .gt_font_italic {
+  font-style: italic;
+}
+
+#gmciexpdyn .gt_super {
+  font-size: 65%;
+}
+
+#gmciexpdyn .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#gmciexpdyn .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#gmciexpdyn .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#gmciexpdyn .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#gmciexpdyn .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#gmciexpdyn .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#gmciexpdyn .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="member_casual">member_casual</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="q1">q1</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="median">median</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="q3">q3</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="IQR">IQR</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="skewness">skewness</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="member_casual" class="gt_row gt_center">casual</td>
+<td headers="q1" class="gt_row gt_center">464s (~7.73 minutes)</td>
+<td headers="median" class="gt_row gt_center">805s (~13.42 minutes)</td>
+<td headers="q3" class="gt_row gt_center">1474s (~24.57 minutes)</td>
+<td headers="IQR" class="gt_row gt_center">1010s (~16.83 minutes)</td>
+<td headers="skewness" class="gt_row gt_right">14.90331</td></tr>
+    <tr><td headers="member_casual" class="gt_row gt_center">member</td>
+<td headers="q1" class="gt_row gt_center">319s (~5.32 minutes)</td>
+<td headers="median" class="gt_row gt_center">541s (~9.02 minutes)</td>
+<td headers="q3" class="gt_row gt_center">930s (~15.5 minutes)</td>
+<td headers="IQR" class="gt_row gt_center">611s (~10.18 minutes)</td>
+<td headers="skewness" class="gt_row gt_right">28.89192</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+<p>Because the data has numerous outliers, the median and interquartile
+range (IQR) are better measures of central tendency and spread.</p>
+<ul>
+<li><p>The mean ride duration for casual riders is 264 seconds (4.4
+minutes) greater than it is for members. The data shows that casual
+riders take longer trips in terms of time.</p></li>
+<li><p>The IQR for casual riders is also greater than for members by 399
+seconds (6.65 minutes), showing that there is a wider spread in the
+typical ride duration for casual riders. Casual riders are more varied
+in how long they ride during each trip.</p></li>
+</ul>
+</div>
+<div id="rideable-type" class="section level2">
+<h2>3.5 Rideable Type</h2>
+<p><img src="Final_report_files/figure-html/unnamed-chunk-8-1.png" width="768" /></p>
+<p>This bar graph shows the relative proportion of each rideable type
+for casual riders and members. The docked bike category is only present
+for casual riders, and based on publicly available information, may be
+synonymous with the classic bike category, as classic bikes must start
+from and return to a dock station.</p>
+<ul>
+<li>Casual riders take a larger percentage of their trips on electric
+bikes (53.9%) compared to members (48.5%).</li>
+</ul>
+<p>This presents an opportunity for Cyclistic to highlight the
+discounted rates members pay for riding electric bikes when
+communicating with casual riders.</p>
+</div>
+<div id="top-10-stations-for-casual-riders-vs-members"
+class="section level2">
+<h2>3.6 Top 10 stations for casual riders vs members</h2>
+<div id="idkamyxznd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#idkamyxznd table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#idkamyxznd thead, #idkamyxznd tbody, #idkamyxznd tfoot, #idkamyxznd tr, #idkamyxznd td, #idkamyxznd th {
+  border-style: none;
+}
+
+#idkamyxznd p {
+  margin: 0;
+  padding: 0;
+}
+
+#idkamyxznd .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#idkamyxznd .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#idkamyxznd .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#idkamyxznd .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#idkamyxznd .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#idkamyxznd .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#idkamyxznd .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#idkamyxznd .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#idkamyxznd .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#idkamyxznd .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#idkamyxznd .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#idkamyxznd .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#idkamyxznd .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#idkamyxznd .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#idkamyxznd .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#idkamyxznd .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#idkamyxznd .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#idkamyxznd .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#idkamyxznd .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#idkamyxznd .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#idkamyxznd .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#idkamyxznd .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#idkamyxznd .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#idkamyxznd .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#idkamyxznd .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#idkamyxznd .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#idkamyxznd .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#idkamyxznd .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#idkamyxznd .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#idkamyxznd .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#idkamyxznd .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#idkamyxznd .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#idkamyxznd .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#idkamyxznd .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#idkamyxznd .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#idkamyxznd .gt_left {
+  text-align: left;
+}
+
+#idkamyxznd .gt_center {
+  text-align: center;
+}
+
+#idkamyxznd .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#idkamyxznd .gt_font_normal {
+  font-weight: normal;
+}
+
+#idkamyxznd .gt_font_bold {
+  font-weight: bold;
+}
+
+#idkamyxznd .gt_font_italic {
+  font-style: italic;
+}
+
+#idkamyxznd .gt_super {
+  font-size: 65%;
+}
+
+#idkamyxznd .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#idkamyxznd .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#idkamyxznd .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#idkamyxznd .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#idkamyxznd .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#idkamyxznd .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#idkamyxznd .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="station_name">station_name</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="member_trips">member_trips</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="station_name" class="gt_row gt_left">Kingsbury St &amp; Kinzie St</td>
+<td headers="member_trips" class="gt_row gt_right">50263</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Clark St &amp; Elm St</td>
+<td headers="member_trips" class="gt_row gt_right">44935</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Wells St &amp; Concord Ln</td>
+<td headers="member_trips" class="gt_row gt_right">43740</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">University Ave &amp; 57th St</td>
+<td headers="member_trips" class="gt_row gt_right">40608</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Clinton St &amp; Washington Blvd</td>
+<td headers="member_trips" class="gt_row gt_right">39706</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Ellis Ave &amp; 60th St</td>
+<td headers="member_trips" class="gt_row gt_right">38823</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Clinton St &amp; Madison St</td>
+<td headers="member_trips" class="gt_row gt_right">38601</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Wells St &amp; Elm St</td>
+<td headers="member_trips" class="gt_row gt_right">37920</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Loomis St &amp; Lexington St</td>
+<td headers="member_trips" class="gt_row gt_right">37311</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Broadway &amp; Barry Ave</td>
+<td headers="member_trips" class="gt_row gt_right">35651</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+<div id="rkopzllocc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rkopzllocc table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#rkopzllocc thead, #rkopzllocc tbody, #rkopzllocc tfoot, #rkopzllocc tr, #rkopzllocc td, #rkopzllocc th {
+  border-style: none;
+}
+
+#rkopzllocc p {
+  margin: 0;
+  padding: 0;
+}
+
+#rkopzllocc .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#rkopzllocc .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#rkopzllocc .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#rkopzllocc .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#rkopzllocc .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rkopzllocc .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rkopzllocc .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rkopzllocc .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#rkopzllocc .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#rkopzllocc .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#rkopzllocc .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#rkopzllocc .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#rkopzllocc .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#rkopzllocc .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#rkopzllocc .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#rkopzllocc .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#rkopzllocc .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#rkopzllocc .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#rkopzllocc .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rkopzllocc .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#rkopzllocc .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#rkopzllocc .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#rkopzllocc .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rkopzllocc .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#rkopzllocc .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#rkopzllocc .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rkopzllocc .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rkopzllocc .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#rkopzllocc .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rkopzllocc .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#rkopzllocc .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rkopzllocc .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rkopzllocc .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rkopzllocc .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rkopzllocc .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rkopzllocc .gt_left {
+  text-align: left;
+}
+
+#rkopzllocc .gt_center {
+  text-align: center;
+}
+
+#rkopzllocc .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#rkopzllocc .gt_font_normal {
+  font-weight: normal;
+}
+
+#rkopzllocc .gt_font_bold {
+  font-weight: bold;
+}
+
+#rkopzllocc .gt_font_italic {
+  font-style: italic;
+}
+
+#rkopzllocc .gt_super {
+  font-size: 65%;
+}
+
+#rkopzllocc .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#rkopzllocc .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#rkopzllocc .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#rkopzllocc .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#rkopzllocc .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#rkopzllocc .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#rkopzllocc .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="station_name">station_name</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="casual_trips">casual_trips</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="station_name" class="gt_row gt_left">Streeter Dr &amp; Grand Ave</td>
+<td headers="casual_trips" class="gt_row gt_right">116482</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">DuSable Lake Shore Dr &amp; Monroe St</td>
+<td headers="casual_trips" class="gt_row gt_right">61479</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Millennium Park</td>
+<td headers="casual_trips" class="gt_row gt_right">52232</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Michigan Ave &amp; Oak St</td>
+<td headers="casual_trips" class="gt_row gt_right">51118</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">DuSable Lake Shore Dr &amp; North Blvd</td>
+<td headers="casual_trips" class="gt_row gt_right">49172</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Shedd Aquarium</td>
+<td headers="casual_trips" class="gt_row gt_right">38526</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Theater on the Lake</td>
+<td headers="casual_trips" class="gt_row gt_right">37657</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Wells St &amp; Concord Ln</td>
+<td headers="casual_trips" class="gt_row gt_right">31611</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Clark St &amp; Armitage Ave</td>
+<td headers="casual_trips" class="gt_row gt_right">27608</td></tr>
+    <tr><td headers="station_name" class="gt_row gt_left">Dusable Harbor</td>
+<td headers="casual_trips" class="gt_row gt_right">27223</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+<p>The tables above rank the top 10 stations (excluding dockless trips)
+for casual riders and members. The number of trips at each station is
+the combination of trips that started at and ended at that station.</p>
+<ul>
+<li><p>Only one station appears on both lists, suggesting that casual
+riders and members may have distinct preferences for the stations where
+they choose to start and end their trips.</p></li>
+<li><p>All stations listed are near the “Loop” (central business
+district) or along the shore of Lake Michigan.</p></li>
+</ul>
+</div>
 </div>
 <div id="recommendations" class="section level1">
-<h1>Recommendations</h1>
+<h1>4. Recommendations</h1>
+<div
+id="highlight-the-value-of-cyclistic-membership-through-transactional-e-mails"
+class="section level2">
+<h2>4.1 Highlight the value of Cyclistic membership through
+transactional e-mails</h2>
+<p>Casual riders take bikes out for longer lengths of time compared to
+members. For members, the median ride was 9.02 minutes long, but for
+casual riders the median was 13.42 minutes. Each time a casual rider
+completes a trip, Cyclistic could email them with the details of their
+trip and a comparison showing how much they would have saved as a
+Cyclistic member for that specific ride. Cyclistic could also display
+the running total of how much the casual rider would have saved on their
+trips over the last 12 months, excluding the price of the membership.
+The email would display that information alongside a distinctive “Join
+Cyclistic” button which leads to the member sign up page.</p>
+<p>The median duration trip for a casual rider would cost $3.38 on a
+classic bike, or $6.88 on an electric bike. For members, that same trip
+would be free on a classic bike, or $2.38 on an electric bike. As an
+example, the email might read, “You would have saved $4.50 with a
+Cyclistic membership. Over the last X number of rides, you would have
+saved $X. Join Cyclistic.” These emails could be analyzed using an A/B
+split test to measure their impact on membership purchase.</p>
 </div>
-<div id="data-sources" class="section level1">
-<h1>Data Sources</h1>
-<p>Trip data was obtained directly from Divvy Bikes (<a
-href="https://divvybikes.com/system-data"
-class="uri">https://divvybikes.com/system-data</a>). This data is owned
-by the City of Chicago and is provided to the public according to the
-Divvy Data License Agreement (<a
-href="https://ride.divvybikes.com/data-license-agreement"
-class="uri">https://ride.divvybikes.com/data-license-agreement</a>). The
-data is an exhaustive record of all trips taken through the Divvy
-bike-share system,and is released on a monthly basis. All trip data is
-anonymized.</p>
-<p>Additional GIS data was obtained from ESRI through the leaflet
-package for R, and is given attribution on all interactive maps.</p>
+<div id="promote-cyclistic-as-a-way-to-access-events-and-activities"
+class="section level2">
+<h2>4.2 Promote Cyclistic as a way to access events and activities</h2>
+<p>Casual riders are most active during weekends and evenings in warmer
+months. The data suggests that casual riders generally use Cyclistic for
+leisure and recreation. Cyclistic can leverage this information to
+convert casual riders to members by promoting upcoming events and
+activities with information about which Cyclistic stations are nearest
+to the event. This informational campaign would include information
+about the benefits of Cyclistic membership, and a call to action to
+join. Cyclistic could possibly partner with events or venues to offer
+benefits to Cyclistic members, such as presale tickets or discounted
+access.</p>
+<p>The informational campaign would include a weekly email to both
+members and casual riders, as well as posts on social media. The emails
+would follow a digest or newsletter format with event details as well as
+information about the nearest Cyclistic stations and calls to action for
+casual riders to purchase Cyclistic memberships. The social media
+component of this campaign would focus on one event per post. The posts
+would be visually focused, showing the event name, location, and nearest
+stations superimposed on top of an event specific photo or illustration.
+A text caption would reiterate key details, as well a call to action to
+join Cyclistic as a member through a link. The impact of this campaign
+could be measured by observing the number of recipients who click
+through and purchase a Cyclistic membership.</p>
+</div>
+<div id="raise-awareness-of-cycling-infrastructure"
+class="section level2">
+<h2>4.3 Raise Awareness of Cycling Infrastructure</h2>
+<p>The heaviest concentration of Cyclistic trips are in the “Loop” and
+around the shore of Lake Michigan. These areas have a higher density of
+cycling infrastructure than most other areas of Chicago, <a
+href="https://www.chicago.gov/content/dam/city/depts/cdot/bike/2022/2022_Chicago%20Bike%20Map.pdf">as
+seen on this map.</a> Cyclistic can highlight cycling infrastructure
+throughout the city through email and social media as a way of
+encouraging casual riders to use bike-share more often and become
+Cyclistic members.</p>
+<p>The most common concern about bicycling among adults in the United
+States is being hit by a motor vehicle while riding a bicycle, according
+to a <a
+href="https://wsd-pfb-sparkinfluence.s3.amazonaws.com/uploads/2019/04/Corona-Report-for-PFB-Participation-2018-for-Website.pdf">2018
+study by Corona Insights performed for the nonprofit PeopleForBikes.</a>
+Other studies on bike share programs have found that traffic safety
+concerns are among the top barriers to bike-share usage. <a
+href="https://www.sciencedirect.com/science/article/pii/S2211335520301443">(Franckle
+et al., 2020)</a> Buffered and protected bike lanes have been
+demonstrated to increase the perception of comfort and safety, as well
+as the percent of individuals interested in bicycling on those paths. <a
+href="https://journals.sagepub.com/doi/abs/10.3141/2520-15?journalCode=trra">(McNeil
+et al., 2019)</a> Creating content featuring buffered and protected bike
+lanes could encourage casual riders to use Cyclistic more often and join
+as members.</p>
+<p>On a weekly or semi-monthly basis during the warmer months of May
+through October, Cyclistic could profile a different cycling lane or
+off-street trail. The profiles could include maps, photographs,
+short-form videos, quotes from riders sharing tips or things they like
+about the routes, as well as points of interest, and Cyclistic stations
+nearby. Each profile would be shared through email and social media
+channels. Calls to action to join Cyclistic as a member would be
+included in each post. Ridership at stations along the profiled route
+could be monitored and compared to historical averages to assess the
+impact of this campaign.</p>
+</div>
+</div>
 </div>
 
+   
+   
+              </div>
+  </div>
+  </div>
+  </div>
+   
+      
+
+  <script>
+    $(document).ready(function () {
+
+		// add bootstrap table styles to pandoc tables
+	$('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+		
+ 		
+	    });
+  </script>
 
 
 
-</div>
-
-<script>
-
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
-}
-$(document).ready(function () {
-  bootstrapStylePandocTables();
-});
-
-
-</script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open');
-  });
-});
-</script>
-
-<!-- code folding -->
-
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
-
+    <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+	document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+  
 </body>
 </html>

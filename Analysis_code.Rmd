@@ -1,6 +1,6 @@
 ---
-title: <br> "Data Analysis"
-date: "r Sys.Date()"
+title: <br> Data Analysis
+date: "April 2nd, 2023"
 output:
   rmdformats::downcute: 
     self_contained: true
@@ -13,8 +13,8 @@ library(rmdformats)
 options(max.print="75")
 knitr::opts_chunk$set(
 	echo = TRUE,
-	message = TRUE, #REVERT LATER
-	warning = TRUE, #REVERT LATER
+	message = FALSE,
+	warning = FALSE,
 	comment = NA,
 	prompt = FALSE,
 	results = TRUE
@@ -25,6 +25,7 @@ opts_knit$set(width=75)
 # 1. Load Packages
 ```{r, results= FALSE}
 library(tidyverse)
+library(gt)
 library(DT)
 library(moments)
 library(sf)
@@ -108,7 +109,6 @@ end_station_rank <- valid_rides %>%
 all_station_rank <- full_join(start_station_rank, end_station_rank, by = "station_name") %>%
   mutate(total_start=casual.x + member.x) %>% 
   mutate(total_end=casual.y + member.y) %>% 
-  rename(casual_start = casual.x) %>% 
   arrange(desc(total_start+total_end))
 
 datatable(all_station_rank, colnames = c("Rank","Location", "Origin (Casual)", "Origin (Member)", 
@@ -116,6 +116,32 @@ datatable(all_station_rank, colnames = c("Rank","Location", "Origin (Casual)", "
                                          "Destination (Member)",
                                          "Origin (Total)", 
                                          "Destination (Total)"))
+
+#Top 10 Member Stations
+top_10_member <- all_station_rank %>% 
+  mutate(member_trips = member.x + member.y) %>% 
+  select(station_name, member_trips) %>%
+  arrange(-member_trips) %>% 
+  slice(2:11)
+
+gt(top_10_member)
+
+#Top 10 Casual Stations
+top_10_casual <- all_station_rank %>% 
+  mutate(casual_trips = casual.x + casual.y) %>% 
+  select(station_name, casual_trips) %>% 
+  arrange(-casual_trips) %>% 
+  slice(2:11)
+
+gt(top_10_casual)
+```
+```{r}
+all_station_rank <- full_join(start_station_rank, end_station_rank, by = "station_name") %>%
+  mutate(member_trips = member.x + member.y) %>% 
+  mutate(casual_trips = casual.x + casual.y) %>%
+  mutate(member_rank = row_number(member_trips)) %>% 
+  mutate(casual_rank = row_number(casual_trips)) %>% 
+  arrange(desc(total_start+total_end))
 ```
 # 4. Seasonal ridership patterns
 ```{r}
@@ -200,18 +226,15 @@ duration_histogram
 ```{r}
 duration_table <- valid_rides %>%
   group_by(member_casual) %>% 
-  summarize(mean = as.duration(mean(ride_length)), 
-            std_dev = sd(ride_length), 
-            q1 = quantile(ride_length, 0.25),
+  summarize(q1 = quantile(ride_length, 0.25),
             median = as.duration(median(as.numeric(ride_length))),
             q3 = quantile(ride_length, 0.75),
             IQR = as.duration(IQR(ride_length)),
-            skewness = skewness(ride_length),
-            kurtosis = kurtosis(ride_length))
+            skewness = skewness(ride_length))
 duration_table
 ```
 
-# N. Rideable Type
+# 8. Rideable Type
 ```{r}
 rideable_df <- valid_rides %>% 
   group_by(member_casual, rideable_type) %>% 
@@ -227,4 +250,12 @@ rideable_plot <- ggplot(rideable_df) +
   scale_y_continuous(name=waiver(), labels = scales::percent) +
   coord_flip()
 rideable_plot
+```
+
+```{r}
+rideable_table <- table(valid_rides$rideable_type, valid_rides$member_casual)
+rideable_table
+
+1240624/(882197+177938+1240624)#53.9%
+1616519/(1616519+1713853)#48.5%
 ```

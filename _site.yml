@@ -1,14 +1,14 @@
-name: "Cyclistic Bike-share Case Study"
+name: "Cyclistic Case Study"
 navbar:
-  title: "Cyclistic Bike-share Case Study"
+  title: "Cyclistic Case Study"
   left:
     - text: "Home"
       href: index.html
+    - text: "Final Report"
+      href: Final_report.html
     - text: "Data Cleaning"
       href: Data_cleaning.html
     - text: "Data Analysis"
       href: Analysis_code.html
-    - text: "Final Report"
-      href: Final_report.html
       
 output_dir: "docs"

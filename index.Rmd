@@ -1,6 +1,6 @@
 ---
-title: <br> "Cyclistic Case Study" 
-date: "r Sys.Date()"
+title: <br> Cyclistic Case Study
+date: "April 2nd, 2023"
 output:
   rmdformats::downcute: 
     self_contained: true
@@ -24,7 +24,7 @@ opts_knit$set(width=75)
 
 # Authorship
 
-Joshua Sabik performed this case study analysis in March 2023 as a capstone project for the Google Data Analytics Professional Certificate. This case study used R Studio desktop to analyze over 5.7 million unique bike-share trips between November 2021 and October 2022. The final analysis report is hosted using Github IO.
+Joshua Sabik performed this case study analysis in March 2023 as a capstone project for the Google Data Analytics Professional Certificate. This case study used R Studio desktop to analyze over 5.7 million unique bike-share trips between November 2021 and October 2022. The final analysis report is hosted using Github Pages.
 
 # Case Study Brief
 

@@ -1,6 +1,6 @@
 ---
-title: <br>"Data Cleaning"
-date: "r Sys.Date()"
+title: <br>Data Cleaning
+date: "April 2nd, 2023"
 output:
   rmdformats::downcute: 
     self_contained: true
@@ -134,7 +134,7 @@ all_rides %>%
 The result, 5,755,694, is equal to the number of rows in all_rides. Each ride_id is unique.
 
 ## 4.2 Invalid durations
-[Divvy's data page](https://divvybikes.com/system-data) states that "The data has been processed to remove trips that are taken by staff as they service and inspect the system; and any trips that were below 60 seconds in length (potentially false starts or users trying to re-dock a bike to ensure it was secure)." In reviewing our data, we see that the minimum value for duration was negative. Exploring the number of trips less than 60s finds the following.
+[Divvy's data page](https://divvybikes.com/system-data) states that "The data has been processed to remove trips that are taken by staff as they service and inspect the system; and any trips that were below 60 seconds in length (potentially false starts or users trying to re-dock a bike to ensure it was secure)." The analysis observed that the minimum value for the trip duration was less than 60 seconds, and was a negative number. The data contains 118,453 records in which the ride length is under 60 seconds.
 
 ```{r}
 #Examine trip lenghts < 60s in duration
@@ -170,7 +170,7 @@ summary(no_end_latlng)
 head(no_end_latlng)
 ```
 
-Micromobility devices, which include bikes and scooters, are not always returned. There are [several documented instances of Divvy bikes found out of place](https://blockclubchicago.org/2022/10/04/how-did-this-chicago-divvy-bike-end-up-in-mexico-its-unclear-but-cant-blame-this-bike-for-heading-south/), some as far as Michoacan, Mexico. Nearly all of these rows have a ride duration of approximately 24 hours. After 24 hours, [Divvy considers a bike to be lost or stolen, and assesses a fee.](https://help.divvybikes.com/hc/en-us/articles/360033123412-My-bike-was-lost-or-stolen) For the purpose of this analysis, we will assume that any trip without an end_lat and end_lng is missing or stolen, and exclude those rides from this analysis.
+Micromobility devices, which include bikes and scooters, are not always returned. There are [several documented instances of Divvy bikes found out of place](https://blockclubchicago.org/2022/10/04/how-did-this-chicago-divvy-bike-end-up-in-mexico-its-unclear-but-cant-blame-this-bike-for-heading-south/), some as far as Michoacan, Mexico. Nearly all of these rows have a ride duration of approximately 24 hours. After 24 hours, [Divvy considers a bike to be lost or stolen, and assesses a fee.](https://help.divvybikes.com/hc/en-us/articles/360033123412-My-bike-was-lost-or-stolen) For the purpose of this analysis, we will assume that any trip without an end_lat and end_lng is missing or stolen, and omit those rides from this analysis.
 
 ### 4.3(b) Null station name and id
 Let's examine the station names and ids. If we isolate and analyze these rows, we see that their start and stop latitude and longitude variables are rounded to two place values, as opposed to rides with station names and ids, which continue to four decimal places.
@@ -181,7 +181,7 @@ no_station <- all_rides %>%
 head(no_station)
 ```
 
-What if these rides do not start or end at a station, because they are not required to? A search of available information finds that in 2020, Divvy began [introducing dockless bikes as part of their system](https://divvybikes.com/explore-chicago/expansion-temp). This would explain why the latitude and longitude are truncated -- to anonymize user data. For the purpose of this analysis, we will assume that rides with null values in the station name and id fields were dockless rides.
+What if these rides do not start or end at a station, because they are not required to? A search of available information finds that in 2020, Divvy began [introducing dockless bikes as part of their system](https://divvybikes.com/explore-chicago/expansion-temp). This would explain why the latitude and longitude are rounded -- to anonymize user data. For the purpose of this analysis, we will assume that rides with null values in the station name and id fields were dockless rides.
 
 ## 4.4 Rides over 24 hours
 As discovered in section 4.3(a), Divvy considers any bike lost for more than 24 hours to be lost or stolen. There are 278 rides in our data set with durations greater than 24 hours. For the purpose of this analysis, they will be excluded.
