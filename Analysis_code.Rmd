@@ -107,41 +107,25 @@ end_station_rank <- valid_rides %>%
 
 #Top Stations (Combined)
 all_station_rank <- full_join(start_station_rank, end_station_rank, by = "station_name") %>%
-  mutate(total_start=casual.x + member.x) %>% 
-  mutate(total_end=casual.y + member.y) %>% 
-  arrange(desc(total_start+total_end))
+  mutate(member_trips=member.x+member.y) %>% 
+  mutate(casual_trips=casual.x+casual.y) %>%
+  mutate(member_rank = row_number(-member_trips)) %>% 
+  mutate(casual_rank = row_number(-casual_trips)) %>%
+  mutate(total_trips = casual_trips + member_trips) %>%
+  select(station_name,casual_trips, casual_rank, member_trips, member_rank,
+         total_trips) %>% 
+  arrange(desc(total_trips))
 
-datatable(all_station_rank, colnames = c("Rank","Location", "Origin (Casual)", "Origin (Member)", 
-                                         "Destination (Casual)",
-                                         "Destination (Member)",
-                                         "Origin (Total)", 
-                                         "Destination (Total)"))
+datatable(all_station_rank, colnames = c("Station Name", "Visits (Casual)",
+                                         "Rank (Casual)", "Visits (Member)",
+                                         "Rank (Member)", "Visits (Total)"))
 
-#Top 10 Member Stations
-top_10_member <- all_station_rank %>% 
-  mutate(member_trips = member.x + member.y) %>% 
-  select(station_name, member_trips) %>%
-  arrange(-member_trips) %>% 
-  slice(2:11)
-
-gt(top_10_member)
-
-#Top 10 Casual Stations
-top_10_casual <- all_station_rank %>% 
-  mutate(casual_trips = casual.x + casual.y) %>% 
-  select(station_name, casual_trips) %>% 
-  arrange(-casual_trips) %>% 
-  slice(2:11)
-
-gt(top_10_casual)
 ```
 ```{r}
-all_station_rank <- full_join(start_station_rank, end_station_rank, by = "station_name") %>%
-  mutate(member_trips = member.x + member.y) %>% 
-  mutate(casual_trips = casual.x + casual.y) %>%
-  mutate(member_rank = row_number(member_trips)) %>% 
-  mutate(casual_rank = row_number(casual_trips)) %>% 
-  arrange(desc(total_start+total_end))
+#all_station_rank <- full_join(start_station_rank, end_station_rank, by = "station_name") %>%
+#  mutate(total_start=casual.x + member.x) %>% 
+#  mutate(total_end=casual.y + member.y) %>% 
+#  arrange(desc(total_start+total_end))
 ```
 # 4. Seasonal ridership patterns
 ```{r}

@@ -25,6 +25,7 @@ opts_knit$set(width=75)
 ```{r, results= FALSE}
 library(tidyverse)
 library(gt)
+library(DT)
 library(moments)
 #library(sf)
 #library(leaflet)
@@ -54,7 +55,49 @@ The cleaned dataset was saved as an RDS file named "valid_rides.rds".
 
 # 3. Analysis
 
-## 3.1 Seasonal variations in casual and member ridership
+## 3.1 Top 10 stations for casual riders vs members
+
+```{r}
+#Top Stations (Start)
+start_station_rank <- valid_rides %>% 
+  select(station_name = start_station_name, member_casual) %>%
+  group_by(member_casual) %>% 
+  count(station_name) %>%
+  pivot_wider(names_from = member_casual, values_from = n)
+
+#Top Stations (End)
+end_station_rank <- valid_rides %>% 
+  select(station_name = end_station_name, member_casual) %>%
+  group_by(member_casual) %>% 
+  count(station_name) %>%
+  pivot_wider(names_from = member_casual, values_from = n) 
+
+#Top Stations (Combined)
+all_station_rank <- full_join(start_station_rank, end_station_rank, by = "station_name") %>%
+  mutate(member_trips=member.x+member.y) %>% 
+  mutate(casual_trips=casual.x+casual.y) %>%
+  mutate(member_rank = row_number(-member_trips)) %>% 
+  mutate(casual_rank = row_number(-casual_trips)) %>%
+  mutate(total_trips = casual_trips + member_trips) %>%
+  select(station_name,casual_trips, casual_rank, member_trips, member_rank,
+         total_trips) %>% 
+  arrange(desc(total_trips))
+
+datatable(all_station_rank, colnames = c("Station Name", "Visits (Casual)",
+                                         "Rank (Casual)", "Visits (Member)",
+                                         "Rank (Member)", "Visits (Total)"))
+
+#Map of top 10 casual and member stations, possible heatmap overlay, possible heatmap separate PRIORITY TWO
+
+```
+
+The tables above rank the top 10 stations (excluding dockless trips) for casual riders and members. The number of trips at each station is the combination of trips that started at and ended at that station.
+
+* Only one station appears on both lists, suggesting that casual riders and members may have distinct preferences for the stations where they choose to start and end their trips.
+
+* All stations listed are near the "Loop" (central business district) or along the shore of Lake Michigan.
+
+## 3.2 Seasonal variations in casual and member ridership
 
 ```{r}
 year_table <- valid_rides %>%
@@ -83,7 +126,7 @@ This scatter plot shows the relationship between each date in the data set, and 
 
 The increased intra-seasonal variation in the warm months could be due to fluctuations in weather or increased demand for events, which could be a topic for further analysis. It may be beneficial to prioritize marketing activities during the warmer months to engage with and convert a greater number of casual riders.
 
-## 3.2 Casual and member ridership by day of week
+## 3.3 Casual and member ridership by day of week
 
 ```{r}
 week_plot <- ggplot(valid_rides, aes(fill = member_casual, x = day_of_week))+
@@ -98,7 +141,7 @@ week_plot
 
 The bar graph above shows the total number of rides taken by casual riders and members, broken down by day of the week. Casual riders are more active on the weekends, while members are more active on weekdays. This data shows again that casual riders are less likely than members to use Cyclistic to commute, and primarily use Cyclistic for pleasure.
 
-## 3.3 Ridership by time of day
+## 3.4 Ridership by time of day
 
 ```{r}
 day_plot <- ggplot(valid_rides) +
@@ -115,7 +158,7 @@ day_plot
 
 The histograms above show the number of rides for each hour of the day for casual riders and members. Both histograms show the lowest number of rides in the early morning, around 3:00 or 4:00 A.M., and the highest number of rides in the evening, around 5:00 P.M. The histogram for member rides shows a smaller, but distinct peak around 8:00 A.M.
 
-## 3.4 Ride Duration
+## 3.5 Ride Duration
 
 ```{r}
 duration_histogram <- ggplot(valid_rides, aes(ride_length, fill = member_casual)) +
@@ -148,7 +191,7 @@ Because the data has numerous outliers, the median and interquartile range (IQR)
 
 * The IQR for casual riders is also greater than for members by 399 seconds (6.65 minutes), showing that there is a wider spread in the typical ride duration for casual riders. Casual riders are more varied in how long they ride during each trip.
 
-## 3.5 Rideable Type
+## 3.6 Rideable Type
 
 ```{r}
 rideable_df <- valid_rides %>% 
@@ -172,55 +215,6 @@ This bar graph shows the relative proportion of each rideable type for casual ri
 * Casual riders take a larger percentage of their trips on electric bikes (53.9%) compared to members (48.5%).
 
 This presents an opportunity for Cyclistic to highlight the discounted rates members pay for riding electric bikes when communicating with casual riders.
-
-## 3.6 Top 10 stations for casual riders vs members
-
-```{r}
-#Top Stations (Start)
-start_station_rank <- valid_rides %>% 
-  select(station_name = start_station_name, member_casual) %>%
-  group_by(member_casual) %>% 
-  count(station_name) %>%
-  pivot_wider(names_from = member_casual, values_from = n)
-
-#Top Stations (End)
-end_station_rank <- valid_rides %>% 
-  select(station_name = end_station_name, member_casual) %>%
-  group_by(member_casual) %>% 
-  count(station_name) %>%
-  pivot_wider(names_from = member_casual, values_from = n) 
-
-#Top Stations (Combined)
-all_station_rank <- full_join(start_station_rank, end_station_rank, by = "station_name") %>%
-  mutate(total_start=casual.x + member.x) %>% 
-  mutate(total_end=casual.y + member.y) %>% 
-  arrange(desc(total_start+total_end))
-
-#Top 10 Member Stations
-top_10_member <- all_station_rank %>% 
-  mutate(member_trips = member.x + member.y) %>% 
-  select(station_name, member_trips) %>%
-  arrange(-member_trips) %>% 
-  slice(2:11)
-gt(top_10_member)
-
-#Top 10 Casual Stations
-top_10_casual <- all_station_rank %>% 
-  mutate(casual_trips = casual.x + casual.y) %>% 
-  select(station_name, casual_trips) %>% 
-  arrange(-casual_trips) %>% 
-  slice(2:11)
-gt(top_10_casual)
-
-#Map of top 10 casual and member stations, possible heatmap overlay, possible heatmap separate PRIORITY TWO
-
-```
-
-The tables above rank the top 10 stations (excluding dockless trips) for casual riders and members. The number of trips at each station is the combination of trips that started at and ended at that station.
-
-* Only one station appears on both lists, suggesting that casual riders and members may have distinct preferences for the stations where they choose to start and end their trips.
-
-* All stations listed are near the "Loop" (central business district) or along the shore of Lake Michigan.
 
 
 # 4. Recommendations
