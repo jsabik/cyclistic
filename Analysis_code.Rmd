@@ -1,5 +1,5 @@
 ---
-title: <br> Data Analysis
+title: "<br> Data Analysis"
 date: "April 2nd, 2023"
 output:
   rmdformats::downcute: 
@@ -10,7 +10,7 @@ output:
 library(knitr)
 library(rmdformats)
 ## Global options
-options(max.print="75")
+options(max.print=1000)
 knitr::opts_chunk$set(
 	echo = TRUE,
 	message = FALSE,

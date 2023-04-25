@@ -7,7 +7,7 @@
 
     
     
-    <title> Data Cleaning</title>
+    <title>  Data Cleaning</title>
 
         <script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
         <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -144,8 +144,9 @@
             <li><a href="#examine-primary-key"
             id="toc-examine-primary-key">4.1 Examine primary
             key</a></li>
-            <li><a href="#invalid-durations"
-            id="toc-invalid-durations">4.2 Invalid durations</a></li>
+            <li><a href="#durations-out-of-expected-range"
+            id="toc-durations-out-of-expected-range">4.2 Durations out
+            of expected range</a></li>
             <li><a href="#null-values" id="toc-null-values">4.3 Null
             values</a></li>
             <li><a href="#rides-over-24-hours"
@@ -198,7 +199,7 @@
         </div><!--/.container -->
       </div><!--/.navbar -->
         
-      <h1 class="title"><br>Data Cleaning</h1>
+      <h1 class="title"><br> Data Cleaning</h1>
       
       <p class="authors">
          <p class="date"><span class="glyphicon glyphicon-calendar"></span> April
@@ -279,9 +280,9 @@ tz(all_rides$started_at)</code></pre>
 <h1>3. Data transformation</h1>
 <div id="create-a-variable-for-the-day-of-week" class="section level2">
 <h2>3.1 Create a variable for the day of week</h2>
-<p>Part of our analysis will examine which days of the week are most
-popular with different rider groups. Here we create a variable for the
-day of the week.</p>
+<p>This analysis will examine which days of the week are most popular
+with different rider groups. The following code will create a variable
+for the day of the week.</p>
 <pre class="r"><code>weekday_levels &lt;- c(&#39;Sunday&#39;, &#39;Monday&#39;, &#39;Tuesday&#39;, &#39;Wednesday&#39;, &#39;Thursday&#39;, 
                     &#39;Friday&#39;, &#39;Saturday&#39;)
 all_rides &lt;- all_rides %&gt;% 
@@ -290,17 +291,18 @@ all_rides &lt;- all_rides %&gt;%
 <div id="create-a-variable-for-the-ride-duration"
 class="section level2">
 <h2>3.2 Create a variable for the ride duration</h2>
-<p>With the ‘started_at’ time and ‘ended_at’ time, we can calculate an
-interesting variable for analysis: the duration of each ride.</p>
-<pre class="r"><code>#Create ride_length to measure duration of ride
+<p>With the ‘started_at’ time and ‘ended_at’ time, it is possible to
+calculate an interesting variable for analysis: the duration of each
+ride.</p>
+<pre class="r"><code>#Create ride_duration to measure duration of ride
 all_rides &lt;- all_rides %&gt;% 
-  mutate(ride_length = as.duration(started_at%--%ended_at))</code></pre>
+  mutate(ride_duration = as.duration(started_at%--%ended_at))</code></pre>
 </div>
 <div id="convert-categorical-variables-to-factors"
 class="section level2">
 <h2>3.3 Convert categorical variables to factors</h2>
-<p>Our data has two categorical variables which can be better analyzed
-by assigning them as factors, ‘rideable_type’ and ‘member_casual’.</p>
+<p>The data has two categorical variables which can be better analyzed
+by recasting them as factors, ‘rideable_type’ and ‘member_casual’.</p>
 <pre class="r"><code>#Convert &#39;rideable_type&#39; and &#39;member_casual&#39; to factors
 all_rides &lt;- all_rides %&gt;% 
   mutate(rideable_type = factor(rideable_type))
@@ -310,13 +312,13 @@ all_rides &lt;- all_rides %&gt;%
 </div>
 <div id="examine-data" class="section level1">
 <h1>4. Examine data</h1>
-<p>Before we clean our data, we will explore the data to look for
-errors, blanks, or any values out of range for our analysis.</p>
+<p>Before the cleaning the data, it is examined to identify errors,
+blanks, or any values out of range for this analysis.</p>
 <div id="examine-primary-key" class="section level2">
 <h2>4.1 Examine primary key</h2>
-<p>Our data has a primary key, which is the ‘ride_id’ variable. We will
-check the integrity of our data by ensuring that each ‘ride_id’ is
-unique.</p>
+<p>The data has a primary key, which is the ‘ride_id’ variable. This
+code will check the integrity of the data by ensuring that each
+‘ride_id’ is unique.</p>
 <pre class="r"><code>#Check if each trip_id is unique
 all_rides %&gt;%
   distinct(ride_id) %&gt;% 
@@ -329,19 +331,19 @@ all_rides %&gt;%
 <p>The result, 5,755,694, is equal to the number of rows in all_rides.
 Each ride_id is unique.</p>
 </div>
-<div id="invalid-durations" class="section level2">
-<h2>4.2 Invalid durations</h2>
+<div id="durations-out-of-expected-range" class="section level2">
+<h2>4.2 Durations out of expected range</h2>
 <p><a href="https://divvybikes.com/system-data">Divvy’s data page</a>
 states that “The data has been processed to remove trips that are taken
 by staff as they service and inspect the system; and any trips that were
 below 60 seconds in length (potentially false starts or users trying to
 re-dock a bike to ensure it was secure).” The analysis observed that the
 minimum value for the trip duration was less than 60 seconds, and was a
-negative number. The data contains 118,453 records in which the ride
+negative number. The data contain 118,453 records in which the ride
 length is under 60 seconds.</p>
 <pre class="r"><code>#Examine trip lenghts &lt; 60s in duration
 all_rides %&gt;%
-  filter(ride_length&lt;60) %&gt;% 
+  filter(ride_duration&lt;60) %&gt;% 
   summarise(total_count=n(),.groups=&#39;drop&#39;) %&gt;% 
   arrange(-total_count)</code></pre>
 <pre><code># A tibble: 1 × 1
@@ -352,7 +354,7 @@ all_rides %&gt;%
 </div>
 <div id="null-values" class="section level2">
 <h2>4.3 Null values</h2>
-<p>Our data should be complete, without any blank fields. The following
+<p>The data should be complete, without any blank fields. The following
 code will count if there are any null values in our data.</p>
 <pre class="r"><code>all_rides %&gt;% 
   summarise(across(everything(), ~ sum(is.na(.x))))</code></pre>
@@ -361,18 +363,19 @@ code will count if there are any null values in our data.</p>
     &lt;int&gt;         &lt;int&gt;    &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
 1       0             0        0       0  878177  878177  940010  940010       0
 # … with 6 more variables: start_lng &lt;int&gt;, end_lat &lt;int&gt;, end_lng &lt;int&gt;,
-#   member_casual &lt;int&gt;, day_of_week &lt;int&gt;, ride_length &lt;int&gt;, and abbreviated
-#   variable names ¹​started_at, ²​ended_at, ³​start_station_name,
+#   member_casual &lt;int&gt;, day_of_week &lt;int&gt;, ride_duration &lt;int&gt;, and
+#   abbreviated variable names ¹​started_at, ²​ended_at, ³​start_station_name,
 #   ⁴​start_station_id, ⁵​end_station_name, ⁶​end_station_id, ⁷​start_lat</code></pre>
 <p>There are null values in start_station_name, start_station_id,
 end_station_name, end_station_id, end_lat, and end_lng.</p>
 <p>The number of null values for station names and ids is concerning.
-The nulls in the station variables account for 23.37% of our data. The
+The nulls in the station variables account for 23.37% of the data. The
 end latitude and longitude are less concerning, accounting for &lt;0.01%
 of the data.</p>
-<p>In an ideal situation, we could ask others who collect this data why
-parts of it are missing. For our case study, we will use publicly
-available information to fill in our understanding of the data.</p>
+<p>In an ideal situation, an analyst could directly ask those who
+collect the data about null values or other anomalous entries. This case
+study will use publicly available information to solve data integrity
+issues.</p>
 <div id="a-null-values-in-end_lat-and-end_lng" class="section level3">
 <h3>4.3(a) Null values in end_lat and end_lng</h3>
 <pre class="r"><code>#Isolate null values of &#39;end_lat&#39; and &#39;end_lng&#39; for analysis
@@ -385,31 +388,40 @@ summary(no_end_latlng)</code></pre>
  Mode  :character   electric_bike:   0   Median :2022-07-02 15:50:32.00  
                                          Mean   :2022-06-24 21:47:55.81  
                                          3rd Qu.:2022-08-20 21:00:17.50  
+                                         Max.   :2022-10-31 21:32:38.00  
+                                                                         
     ended_at                      start_station_name start_station_id  
  Min.   :2021-11-01 07:18:08.00   Length:5835        Length:5835       
  1st Qu.:2022-05-20 23:36:26.00   Class :character   Class :character  
  Median :2022-07-04 12:56:23.00   Mode  :character   Mode  :character  
  Mean   :2022-06-26 23:02:02.21                                        
  3rd Qu.:2022-08-23 17:27:50.50                                        
+ Max.   :2022-11-07 04:53:58.00                                        
+                                                                       
  end_station_name   end_station_id       start_lat       start_lng     
  Length:5835        Length:5835        Min.   :41.65   Min.   :-87.77  
  Class :character   Class :character   1st Qu.:41.87   1st Qu.:-87.66  
  Mode  :character   Mode  :character   Median :41.89   Median :-87.63  
                                        Mean   :41.87   Mean   :-87.64  
                                        3rd Qu.:41.91   3rd Qu.:-87.62  
+                                       Max.   :42.06   Max.   :-87.53  
+                                                                       
     end_lat        end_lng     member_casual    day_of_week  
  Min.   : NA    Min.   : NA    casual:5144   Sunday   :1093  
  1st Qu.: NA    1st Qu.: NA    member: 691   Monday   : 727  
  Median : NA    Median : NA                  Tuesday  : 656  
  Mean   :NaN    Mean   :NaN                  Wednesday: 618  
  3rd Qu.: NA    3rd Qu.: NA                  Thursday : 674  
-  ride_length                            
+ Max.   : NA    Max.   : NA                  Friday   : 852  
+ NA&#39;s   :5835   NA&#39;s   :5835                 Saturday :1215  
+ ride_duration                           
  Min.   :6s                              
  1st Qu.:89991s (~1.04 days)             
  Median :89994s (~1.04 days)             
  Mean   :177246.388517566s (~2.05 days)  
  3rd Qu.:90001s (~1.04 days)             
- [ reached getOption(&quot;max.print&quot;) -- omitted 2 rows ]</code></pre>
+ Max.   :2483235s (~4.11 weeks)          
+                                         </code></pre>
 <pre class="r"><code>head(no_end_latlng)</code></pre>
 <pre><code># A tibble: 6 × 15
   ride_id        ridea…¹ started_at          ended_at            start…² start…³
@@ -422,7 +434,7 @@ summary(no_end_latlng)</code></pre>
 6 D893434A1E5B0… docked… 2021-11-26 16:07:04 2021-11-27 17:07:05 Shedd … 15544  
 # … with 9 more variables: end_station_name &lt;chr&gt;, end_station_id &lt;chr&gt;,
 #   start_lat &lt;dbl&gt;, start_lng &lt;dbl&gt;, end_lat &lt;dbl&gt;, end_lng &lt;dbl&gt;,
-#   member_casual &lt;fct&gt;, day_of_week &lt;fct&gt;, ride_length &lt;Duration&gt;, and
+#   member_casual &lt;fct&gt;, day_of_week &lt;fct&gt;, ride_duration &lt;Duration&gt;, and
 #   abbreviated variable names ¹​rideable_type, ²​start_station_name,
 #   ³​start_station_id</code></pre>
 <p>Micromobility devices, which include bikes and scooters, are not
@@ -433,16 +445,18 @@ as Michoacan, Mexico. Nearly all of these rows have a ride duration of
 approximately 24 hours. After 24 hours, <a
 href="https://help.divvybikes.com/hc/en-us/articles/360033123412-My-bike-was-lost-or-stolen">Divvy
 considers a bike to be lost or stolen, and assesses a fee.</a> For the
-purpose of this analysis, we will assume that any trip without an
-end_lat and end_lng is missing or stolen, and omit those rides from this
-analysis.</p>
+purpose of this analysis, rides with null values for both the end_lat
+and end_lng variables will be considered missing or stolen, and those
+rides will be omitted from this analysis.</p>
 </div>
 <div id="b-null-station-name-and-id" class="section level3">
 <h3>4.3(b) Null station name and id</h3>
-<p>Let’s examine the station names and ids. If we isolate and analyze
-these rows, we see that their start and stop latitude and longitude
-variables are rounded to two place values, as opposed to rides with
-station names and ids, which continue to four decimal places.</p>
+<p>Records with null values for the start_station_id,
+start_station_name, end_station_id, and end_station_name were isolated
+and analyzed. In these records the start_lat and start_lng, or end_lat
+and end_lng, variables are rounded to two place values, as opposed to
+rides with station names and ids, which continue to five decimal
+places.</p>
 <pre class="r"><code>no_station &lt;- all_rides %&gt;% 
   filter(is.na(start_station_name) | is.na(end_station_name))
 
@@ -458,17 +472,68 @@ head(no_station)</code></pre>
 6 02F85C2C3C5F7… electr… 2021-11-26 18:34:07 2021-11-26 18:52:49 Michig… 13042  
 # … with 9 more variables: end_station_name &lt;chr&gt;, end_station_id &lt;chr&gt;,
 #   start_lat &lt;dbl&gt;, start_lng &lt;dbl&gt;, end_lat &lt;dbl&gt;, end_lng &lt;dbl&gt;,
-#   member_casual &lt;fct&gt;, day_of_week &lt;fct&gt;, ride_length &lt;Duration&gt;, and
+#   member_casual &lt;fct&gt;, day_of_week &lt;fct&gt;, ride_duration &lt;Duration&gt;, and
 #   abbreviated variable names ¹​rideable_type, ²​start_station_name,
 #   ³​start_station_id</code></pre>
-<p>What if these rides do not start or end at a station, because they
-are not required to? A search of available information finds that in
-2020, Divvy began <a
+<pre class="r"><code>summary(no_station)</code></pre>
+<pre><code>   ride_id                rideable_type       started_at                    
+ Length:1345256     classic_bike :   4338   Min.   :2021-11-01 00:02:27.00  
+ Class :character   docked_bike  :   2570   1st Qu.:2022-04-15 09:22:04.25  
+ Mode  :character   electric_bike:1338348   Median :2022-06-30 21:24:37.00  
+                                            Mean   :2022-06-09 18:58:17.02  
+                                            3rd Qu.:2022-08-27 14:20:58.25  
+                                            Max.   :2022-10-31 23:58:53.00  
+                                                                            
+    ended_at                      start_station_name start_station_id  
+ Min.   :2021-11-01 00:09:26.00   Length:1345256     Length:1345256    
+ 1st Qu.:2022-04-15 09:37:13.25   Class :character   Class :character  
+ Median :2022-06-30 21:59:07.50   Mode  :character   Mode  :character  
+ Mean   :2022-06-09 19:24:55.90                                        
+ 3rd Qu.:2022-08-27 14:46:54.75                                        
+ Max.   :2022-11-07 04:53:58.00                                        
+                                                                       
+ end_station_name   end_station_id       start_lat       start_lng     
+ Length:1345256     Length:1345256     Min.   :41.64   Min.   :-87.84  
+ Class :character   Class :character   1st Qu.:41.88   1st Qu.:-87.68  
+ Mode  :character   Mode  :character   Median :41.91   Median :-87.65  
+                                       Mean   :41.90   Mean   :-87.66  
+                                       3rd Qu.:41.94   3rd Qu.:-87.63  
+                                       Max.   :42.07   Max.   :-87.52  
+                                                                       
+    end_lat         end_lng       member_casual      day_of_week    
+ Min.   :41.39   Min.   :-88.97   casual:584851   Sunday   :183798  
+ 1st Qu.:41.88   1st Qu.:-87.68   member:760405   Monday   :174457  
+ Median :41.91   Median :-87.65                   Tuesday  :179534  
+ Mean   :41.90   Mean   :-87.66                   Wednesday:187475  
+ 3rd Qu.:41.94   3rd Qu.:-87.63                   Thursday :200368  
+ Max.   :42.37   Max.   :-87.30                   Friday   :200867  
+ NA&#39;s   :5835    NA&#39;s   :5835                     Saturday :218757  
+ ride_duration                               
+ Min.   :-621201s (~-1.03 weeks)             
+ 1st Qu.:308s (~5.13 minutes)                
+ Median :557s (~9.28 minutes)                
+ Mean   :1598.87106097278s (~26.65 minutes)  
+ 3rd Qu.:1014s (~16.9 minutes)               
+ Max.   :2483235s (~4.11 weeks)              
+                                             </code></pre>
+<p>It is possible that these rides do not start or end at a station
+because they are not required to. A search of available information
+finds that in 2020, Divvy began <a
 href="https://divvybikes.com/explore-chicago/expansion-temp">introducing
-dockless bikes as part of their system</a>. This would explain why the
-latitude and longitude are rounded – to anonymize user data. For the
-purpose of this analysis, we will assume that rides with null values in
-the station name and id fields were dockless rides.</p>
+dockless bikes as part of their system</a>. This would help to explain
+why the latitude and longitude are rounded – to anonymize user data.
+Rides with null values in the station name and id variables will be
+included in the analysis, and the null values will be replaced with the
+string “No ID” or “No Station”.</p>
+<p>While the vast majority of rideable_type without start or end station
+information are electric bikes, some are docked bikes or classic bikes.
+While electric bikes are allowed to end their rides outside of a
+station, classic bikes and docked bikes must be returned to a station.
+It is possible that the electric bike rides without station information
+are dockless rides, and the classic and docked bikes without station
+information were improperly ended. Furthur inspection notes that the
+maximum for ride duration is 4.11 weeks, well in excess of Cyclistic’s
+24 hour ride maximum.</p>
 </div>
 </div>
 <div id="rides-over-24-hours" class="section level2">
@@ -478,7 +543,7 @@ more than 24 hours to be lost or stolen. There are 278 rides in our data
 set with durations greater than 24 hours. For the purpose of this
 analysis, they will be excluded.</p>
 <pre class="r"><code>all_rides %&gt;% 
-  filter(ride_length &gt;= (24*60*60)) %&gt;%
+  filter(ride_duration &gt;= (24*60*60)) %&gt;%
   filter(!is.na(end_lat) | !is.na(end_lng)) %&gt;% 
   summarize(count=n())</code></pre>
 <pre><code># A tibble: 1 × 1
@@ -491,56 +556,65 @@ analysis, they will be excluded.</p>
 <h1>5. Cleaning data</h1>
 <p>After a through exploration of the data, it can be efficiently
 filtered and cleaned.</p>
-<pre class="r"><code>valid_rides &lt;- all_rides %&gt;% 
-  filter(ride_length &gt;= 60) %&gt;% #Rides &lt; 60s are not valid trips (per Divvy)
-  filter(ride_length &lt; (24*60*60)) %&gt;% #Rides &gt; 24h are lost/stolen
+<pre class="r"><code>cleaned_rides &lt;- all_rides %&gt;% 
+  filter(ride_duration &gt;= 60) %&gt;% #Rides &lt; 60s are not valid trips (per Divvy)
+  filter(ride_duration &lt; (24*60*60)) %&gt;% #Rides &gt; 24h are lost/stolen
   filter(!is.na(end_lat) | !is.na(end_lng)) %&gt;%  #Null end position
-  mutate(start_station_name = replace_na(start_station_name, &quot;Dockless&quot;)) %&gt;% 
+  mutate(start_station_name = replace_na(start_station_name, &quot;No Station&quot;)) %&gt;% 
   mutate(start_station_id = replace_na(start_station_id, &quot;No ID&quot;)) %&gt;% 
-  mutate(end_station_name = replace_na(end_station_name, &quot;Dockless&quot;)) %&gt;% 
+  mutate(end_station_name = replace_na(end_station_name, &quot;No Station&quot;)) %&gt;% 
   mutate(end_station_id = replace_na(end_station_id, &quot;No ID&quot;))
 
-summary(valid_rides)</code></pre>
+summary(cleaned_rides)</code></pre>
 <pre><code>   ride_id                rideable_type       started_at                    
  Length:5631132     classic_bike :2596050   Min.   :2021-11-01 00:00:14.00  
  Class :character   docked_bike  : 177938   1st Qu.:2022-04-27 09:44:33.25  
  Mode  :character   electric_bike:2857144   Median :2022-06-30 16:48:58.50  
                                             Mean   :2022-06-13 18:26:37.81  
                                             3rd Qu.:2022-08-24 18:27:55.50  
+                                            Max.   :2022-10-31 23:59:33.00  
+                                                                            
     ended_at                      start_station_name start_station_id  
  Min.   :2021-11-01 00:04:06.00   Length:5631132     Length:5631132    
  1st Qu.:2022-04-27 09:56:54.50   Class :character   Class :character  
  Median :2022-06-30 17:04:42.50   Mode  :character   Mode  :character  
  Mean   :2022-06-13 18:43:15.53                                        
  3rd Qu.:2022-08-24 18:45:07.50                                        
+ Max.   :2022-11-01 08:59:46.00                                        
+                                                                       
  end_station_name   end_station_id       start_lat       start_lng     
  Length:5631132     Length:5631132     Min.   :41.64   Min.   :-87.84  
  Class :character   Class :character   1st Qu.:41.88   1st Qu.:-87.66  
  Mode  :character   Mode  :character   Median :41.90   Median :-87.64  
                                        Mean   :41.90   Mean   :-87.65  
                                        3rd Qu.:41.93   3rd Qu.:-87.63  
+                                       Max.   :45.64   Max.   :-73.80  
+                                                                       
     end_lat         end_lng       member_casual       day_of_week    
  Min.   :41.39   Min.   :-88.97   casual:2300760   Sunday   :774910  
  1st Qu.:41.88   1st Qu.:-87.66   member:3330372   Monday   :758320  
  Median :41.90   Median :-87.64                    Tuesday  :771556  
  Mean   :41.90   Mean   :-87.65                    Wednesday:788199  
  3rd Qu.:41.93   3rd Qu.:-87.63                    Thursday :821849  
-  ride_length                               
+ Max.   :42.37   Max.   :-87.30                    Friday   :797982  
+                                                   Saturday :918316  
+ ride_duration                              
  Min.   :60s (~1 minutes)                   
  1st Qu.:365s (~6.08 minutes)               
  Median :633s (~10.55 minutes)              
  Mean   :997.71594823208s (~16.63 minutes)  
  3rd Qu.:1128s (~18.8 minutes)              
- [ reached getOption(&quot;max.print&quot;) -- omitted 2 rows ]</code></pre>
-<pre class="r"><code>str(valid_rides)</code></pre>
+ Max.   :86362s (~23.99 hours)              
+                                            </code></pre>
+<pre class="r"><code>str(cleaned_rides)</code></pre>
 <pre><code>tibble [5,631,132 × 15] (S3: tbl_df/tbl/data.frame)
  $ ride_id           : chr [1:5631132] &quot;7C00A93E10556E47&quot; &quot;90854840DFD508BA&quot; &quot;0A7D10CDD144061C&quot; &quot;2F3BE33085BCFF02&quot; ...
  $ rideable_type     : Factor w/ 3 levels &quot;classic_bike&quot;,..: 3 3 3 3 3 3 3 3 3 3 ...
  $ started_at        : POSIXct[1:5631132], format: &quot;2021-11-27 13:27:38&quot; &quot;2021-11-27 13:38:25&quot; ...
  $ ended_at          : POSIXct[1:5631132], format: &quot;2021-11-27 13:46:38&quot; &quot;2021-11-27 13:56:10&quot; ...
- $ start_station_name: chr [1:5631132] &quot;Dockless&quot; &quot;Dockless&quot; &quot;Dockless&quot; &quot;Dockless&quot; ...
+ $ start_station_name: chr [1:5631132] &quot;No Station&quot; &quot;No Station&quot; &quot;No Station&quot; &quot;No Station&quot; ...
  $ start_station_id  : chr [1:5631132] &quot;No ID&quot; &quot;No ID&quot; &quot;No ID&quot; &quot;No ID&quot; ...
- $ end_station_name  : chr [1:5631132] &quot;Dockless&quot; &quot;Dockless&quot; &quot;Dockless&quot; &quot;Dockless&quot; ...
+ $ end_station_name  : chr [1:5631132] &quot;No Station&quot; &quot;No Station&quot; &quot;No Station&quot; &quot;No Station&quot; ...
  $ end_station_id    : chr [1:5631132] &quot;No ID&quot; &quot;No ID&quot; &quot;No ID&quot; &quot;No ID&quot; ...
  $ start_lat         : num [1:5631132] 41.9 42 42 41.9 41.9 ...
  $ start_lng         : num [1:5631132] -87.7 -87.7 -87.7 -87.8 -87.6 ...
@@ -548,9 +622,9 @@ summary(valid_rides)</code></pre>
  $ end_lng           : num [1:5631132] -87.7 -87.7 -87.7 -87.8 -87.6 ...
  $ member_casual     : Factor w/ 2 levels &quot;casual&quot;,&quot;member&quot;: 1 1 1 1 1 1 1 1 1 1 ...
  $ day_of_week       : Factor w/ 7 levels &quot;Sunday&quot;,&quot;Monday&quot;,..: 7 7 6 7 6 6 7 7 7 7 ...
- $ ride_length       :Formal class &#39;Duration&#39; [package &quot;lubridate&quot;] with 1 slot
+ $ ride_duration     :Formal class &#39;Duration&#39; [package &quot;lubridate&quot;] with 1 slot
   .. ..@ .Data: num [1:5631132] 1140 1065 142 301 1273 ...</code></pre>
-<p>Our cleaning process removed 124,562 rows from our data set: 118,453
+<p>The cleaning process removed 124,562 rows from our data set: 118,453
 rides were less than 60s, 5,377 rides were greater than 24h, and 5,835
 had null values for end_lat and end_lng. There is significant overlap
 between the latter two categories.</p>
@@ -563,16 +637,16 @@ start_lat and start_lng was located. Upon further inspection, the
 start_station_name was identified as “Pawel Bialowas - Test - PBSC
 charging station”. The following code removes any record with the word
 “test” in either the start station or end station name.</p>
-<pre class="r"><code># Subset the valid_rides data frame to exclude rows where start_station_name or end_station_name contains &quot;test&quot;
-valid_rides &lt;- valid_rides[!(grepl(&quot;test&quot;, valid_rides$start_station_name, ignore.case = TRUE) | 
-                             grepl(&quot;test&quot;, valid_rides$end_station_name, ignore.case = TRUE)),]</code></pre>
+<pre class="r"><code># Subset the cleaned_rides data frame to exclude rows where start_station_name or end_station_name contains &quot;test&quot;
+cleaned_rides &lt;- cleaned_rides[!(grepl(&quot;test&quot;, cleaned_rides$start_station_name, ignore.case = TRUE) | 
+                             grepl(&quot;test&quot;, cleaned_rides$end_station_name, ignore.case = TRUE)),]</code></pre>
 <p>One record was removed because it contained the word “test” in one of
 the station name variables.</p>
 <p><strong>Saving the cleaned data</strong></p>
 <p>The following code exports the data as an RDS file for later
 analysis.</p>
 <pre class="r"><code>saveRDS(all_rides,&quot;Data/all_rides.RDS&quot;)
-saveRDS(valid_rides, &quot;Data/valid_rides.RDS&quot;)</code></pre>
+saveRDS(cleaned_rides, &quot;Data/cleaned_rides.RDS&quot;)</code></pre>
 </div>
 </div>
 

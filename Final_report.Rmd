@@ -9,7 +9,7 @@ output:
 library(knitr)
 library(rmdformats)
 ## Global options
-options(max.print="75")
+options(max.print=1000)
 knitr::opts_chunk$set(
     echo = FALSE,
     message = FALSE,
