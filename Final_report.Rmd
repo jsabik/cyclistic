@@ -1,7 +1,6 @@
 ---
-title: <br> 
-  Final Report
-date: "`r Sys.Date()`"
+title: "<br> Final Report"
+date: "April 2nd, 2023"
 output:
   rmdformats::downcute:
     self_contained: true
@@ -34,7 +33,7 @@ library(moments)
 ```
 
 ```{r, results= FALSE}
-valid_rides <- readRDS("Data/valid_rides.RDS")
+cleaned_rides <- readRDS("Data/cleaned_rides.RDS")
 ```
 
 # 1. Executive summary
@@ -51,7 +50,7 @@ The twelve monthly CSV data sets were merged into one R data frame. Trips with a
 
 The data cleaning process identified a significant number of null values in station name and station ID. These records were observed to have rounded values for starting and ending latitude and longitudes, which would be consistent with protecting identifiable user information. A search of publicly available information found that in 2020, Divvy began [introducing dockless bikes as part of their system](https://divvybikes.com/explore-chicago/expansion-temp). As a dockless ride would not need to start or end at a station, and there were no other indications for dockless rides, it was inferred that these missing values represented dockless rides. Additional analysis found that all rides with missing station names and station IDs, rides with null values for latitude or longitude, were omitted from the analysis.
 
-The cleaned dataset was saved as an RDS file named "valid_rides.rds".
+The cleaned dataset was saved as an RDS file named "cleaned_rides.rds".
 
 # 3. Analysis
 
@@ -59,14 +58,14 @@ The cleaned dataset was saved as an RDS file named "valid_rides.rds".
 
 ```{r}
 #Top Stations (Start)
-start_station_rank <- valid_rides %>% 
+start_station_rank <- cleaned_rides %>% 
   select(station_name = start_station_name, member_casual) %>%
   group_by(member_casual) %>% 
   count(station_name) %>%
   pivot_wider(names_from = member_casual, values_from = n)
 
 #Top Stations (End)
-end_station_rank <- valid_rides %>% 
+end_station_rank <- cleaned_rides %>% 
   select(station_name = end_station_name, member_casual) %>%
   group_by(member_casual) %>% 
   count(station_name) %>%
@@ -100,7 +99,7 @@ The tables above rank the top 10 stations (excluding dockless trips) for casual 
 ## 3.2 Seasonal variations in casual and member ridership
 
 ```{r}
-year_table <- valid_rides %>%
+year_table <- cleaned_rides %>%
   select(started_at, member_casual) %>% 
   group_by(member_casual) %>% 
   count(date = date(started_at)) %>% 
@@ -129,7 +128,7 @@ The increased intra-seasonal variation in the warm months could be due to fluctu
 ## 3.3 Casual and member ridership by day of week
 
 ```{r}
-week_plot <- ggplot(valid_rides, aes(fill = member_casual, x = day_of_week))+
+week_plot <- ggplot(cleaned_rides, aes(fill = member_casual, x = day_of_week))+
   geom_bar(position = "dodge", stat = "count") +
   scale_y_continuous(labels = scales::label_number())+
   labs(y = "Total Rides", x = "Day of the Week", 
@@ -144,7 +143,7 @@ The bar graph above shows the total number of rides taken by casual riders and m
 ## 3.4 Ridership by time of day
 
 ```{r}
-day_plot <- ggplot(valid_rides) +
+day_plot <- ggplot(cleaned_rides) +
   geom_histogram(mapping = aes(x=hour(started_at), fill = member_casual),
                  binwidth = 1)+
   scale_y_continuous(labels = scales::label_number_si())+
@@ -161,7 +160,7 @@ The histograms above show the number of rides for each hour of the day for casua
 ## 3.5 Ride Duration
 
 ```{r}
-duration_histogram <- ggplot(valid_rides, aes(ride_length, fill = member_casual)) +
+duration_histogram <- ggplot(cleaned_rides, aes(ride_duration, fill = member_casual)) +
   geom_histogram(binwidth = 180) +
   xlim(0,3600) +
   scale_y_continuous(labels  = scales::label_number_si())+
@@ -175,13 +174,13 @@ duration_histogram
 These histograms show the duration of each ride, grouped into segments of 3 minutes each. Both histograms show left skewness and a peak in the 3-6 minute range.
 
 ```{r}
-duration_table <- valid_rides %>%
+duration_table <- cleaned_rides %>%
   group_by(member_casual) %>% 
-  summarize(q1 = quantile(ride_length, 0.25),
-            median = as.duration(median(as.numeric(ride_length))),
-            q3 = quantile(ride_length, 0.75),
-            IQR = as.duration(IQR(ride_length)),
-            skewness = skewness(ride_length))
+  summarize(q1 = quantile(ride_duration, 0.25),
+            median = as.duration(median(as.numeric(ride_duration))),
+            q3 = quantile(ride_duration, 0.75),
+            IQR = as.duration(IQR(ride_duration)),
+            skewness = skewness(ride_duration))
 gt(duration_table)
 ```
 
@@ -194,7 +193,7 @@ Because the data has numerous outliers, the median and interquartile range (IQR)
 ## 3.6 Rideable Type
 
 ```{r}
-rideable_df <- valid_rides %>% 
+rideable_df <- cleaned_rides %>% 
   group_by(member_casual, rideable_type) %>% 
   count(rideable_type)
 

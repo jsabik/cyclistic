@@ -36,38 +36,38 @@ library(leafgl)
 
 # 2. Import Cleaned Data
 ```{r, results= FALSE}
-valid_rides <- readRDS("Data/valid_rides.RDS")
+cleaned_rides <- readRDS("Data/cleaned_rides.RDS")
 ```
 
 # 3. Ride origins and destinations
 ```{r, eval = FALSE}
 #Data needs to be binned https://search.r-project.org/CRAN/refmans/leaflet.extras2/html/addHexbin.html
 
-member_endlatlng <- valid_rides %>%
+member_endlatlng <- cleaned_rides %>%
   filter(member_casual == 'member') %>% 
   select(end_lat, end_lng)
 member_endlatlng_pts <- st_as_sf(member_endlatlng,
                                  coords = c("end_lng", "end_lat"), crs = 4326)
 
-casual_endlatlng <- valid_rides %>%
+casual_endlatlng <- cleaned_rides %>%
   filter(member_casual == 'casual') %>% 
   select(end_lat, end_lng)
 casual_endlatlng_pts <- st_as_sf(casual_endlatlng,
                                  coords = c("end_lng", "end_lat"), crs = 4326)
 
-member_startlatlng <- valid_rides %>%
+member_startlatlng <- cleaned_rides %>%
   filter(member_casual == 'member') %>% 
   select(start_lat, start_lng)
 member_startlatlng_pts <- st_as_sf(member_startlatlng,
                                  coords = c("start_lng", "start_lat"), crs = 4326)
 
-casual_startlatlng <- valid_rides %>%
+casual_startlatlng <- cleaned_rides %>%
   filter(member_casual == 'casual') %>% 
   select(start_lat, start_lng)
 casual_startlatlng_pts <- st_as_sf(casual_startlatlng,
                                  coords = c("start_lng", "start_lat"), crs = 4326)
 
-endlatlng <- valid_rides %>%
+endlatlng <- cleaned_rides %>%
   select(end_lat, end_lng, member_casual)
 endlatlng_pointmap_gl <- endlatlng %>% 
   leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
@@ -92,14 +92,14 @@ endlatlng_pointmap_gl
 
 ```{r}
 #Top Stations (Start)
-start_station_rank <- valid_rides %>% 
+start_station_rank <- cleaned_rides %>% 
   select(station_name = start_station_name, member_casual) %>%
   group_by(member_casual) %>% 
   count(station_name) %>%
   pivot_wider(names_from = member_casual, values_from = n)
 
 #Top Stations (End)
-end_station_rank <- valid_rides %>% 
+end_station_rank <- cleaned_rides %>% 
   select(station_name = end_station_name, member_casual) %>%
   group_by(member_casual) %>% 
   count(station_name) %>%
@@ -129,7 +129,7 @@ datatable(all_station_rank, colnames = c("Station Name", "Visits (Casual)",
 ```
 # 4. Seasonal ridership patterns
 ```{r}
-year_table <- valid_rides %>%
+year_table <- cleaned_rides %>%
   select(started_at, member_casual) %>% 
   group_by(member_casual) %>% 
   count(date = date(started_at)) %>% 
@@ -146,7 +146,7 @@ year_plot
 ```
 
 ```{r}
-month_table <- xtabs(~member_casual+month(valid_rides$started_at), data=valid_rides)
+month_table <- xtabs(~member_casual+month(cleaned_rides$started_at), data=cleaned_rides)
 colnames(month_table) <- month.name
 prop_month_table <- prop.table(month_table)
 prop_month_table <- round(prop_month_table, 3)
@@ -156,7 +156,7 @@ prop_month_table
 
 # 5. Rides by day of the week
 ```{r}
-week_plot <- ggplot(valid_rides, aes(fill = member_casual, x = day_of_week))+
+week_plot <- ggplot(cleaned_rides, aes(fill = member_casual, x = day_of_week))+
   geom_bar(position = "dodge", stat = "count") +
   scale_y_continuous(labels = scales::label_number())+
   labs(y = "Total Rides", x = "Day of the Week", 
@@ -167,7 +167,7 @@ week_plot
 ```
 
 ```{r}
-day_table <- xtabs(~member_casual+day_of_week, data=valid_rides)
+day_table <- xtabs(~member_casual+day_of_week, data=cleaned_rides)
 prop_day_table <- prop.table(day_table)
 prop_day_table <- round(prop_day_table, 3)
 prop_day_table <- addmargins(prop_day_table)
@@ -175,7 +175,7 @@ prop_day_table
 ```
 # 6. Rides by time of Day
 ```{r}
-day_plot <- ggplot(valid_rides) +
+day_plot <- ggplot(cleaned_rides) +
   geom_histogram(mapping = aes(x=hour(started_at), fill = member_casual),
                  binwidth = 1)+
   scale_y_continuous(labels = scales::label_number_si())+
@@ -188,7 +188,7 @@ day_plot
 ```
 
 ```{r}
-hour_table <- xtabs(~member_casual+format(started_at, "%H"), data=valid_rides)
+hour_table <- xtabs(~member_casual+format(started_at, "%H"), data=cleaned_rides)
 prop_hour_table <- prop.table(hour_table)
 prop_hour_table <- round(prop_hour_table, 3)
 prop_hour_table <- addmargins(prop_hour_table)
@@ -196,7 +196,7 @@ prop_hour_table
 ```
 # 7. Ride duration
 ```{r}
-duration_histogram <- ggplot(valid_rides, aes(ride_length, fill = member_casual)) +
+duration_histogram <- ggplot(cleaned_rides, aes(ride_duration, fill = member_casual)) +
   geom_histogram(binwidth = 180) +
   xlim(0,3600) +
   scale_y_continuous(labels  = scales::label_number_si())+
@@ -208,19 +208,19 @@ duration_histogram
 ```
 
 ```{r}
-duration_table <- valid_rides %>%
+duration_table <- cleaned_rides %>%
   group_by(member_casual) %>% 
-  summarize(q1 = quantile(ride_length, 0.25),
-            median = as.duration(median(as.numeric(ride_length))),
-            q3 = quantile(ride_length, 0.75),
-            IQR = as.duration(IQR(ride_length)),
-            skewness = skewness(ride_length))
+  summarize(q1 = quantile(ride_duration, 0.25),
+            median = as.duration(median(as.numeric(ride_duration))),
+            q3 = quantile(ride_duration, 0.75),
+            IQR = as.duration(IQR(ride_duration)),
+            skewness = skewness(ride_duration))
 duration_table
 ```
 
 # 8. Rideable Type
 ```{r}
-rideable_df <- valid_rides %>% 
+rideable_df <- cleaned_rides %>% 
   group_by(member_casual, rideable_type) %>% 
   count(rideable_type)
 
@@ -237,7 +237,7 @@ rideable_plot
 ```
 
 ```{r}
-rideable_table <- table(valid_rides$rideable_type, valid_rides$member_casual)
+rideable_table <- table(cleaned_rides$rideable_type, cleaned_rides$member_casual)
 rideable_table
 
 1240624/(882197+177938+1240624)#53.9%

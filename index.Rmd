@@ -1,5 +1,5 @@
 ---
-title: <br> Cyclistic Case Study
+title: "<br> Cyclistic Case Study"
 date: "April 2nd, 2023"
 output:
   rmdformats::downcute: 
