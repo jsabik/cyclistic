@@ -38,7 +38,7 @@ cleaned_rides <- readRDS("Data/cleaned_rides.RDS")
 
 # 1. Executive summary
 
-This analysis examines the usage characteristics of casual riders compared to annual members in order to develop marketing strategies that convert casual riders into annual members. Cyclistic's finance analysts have concluded that annual members are much more profitable than casual riders. Cyclistic believes that maximizing the number of annual members will be key to future growth. This analysis concludes that casual riders are more likely than members to ride on evenings, weekends, and warmer months, to use electric bikes, and take longer rides. Recommendations drawn from the data include: transactional e-mails for casual riders to see the lower trip price for members, a digital campaign highlighting events and activities accessible via Cyclistic bikes, and a digital campaign to expand user awareness of comfortable cycling paths and related points of interest.
+This analysis examines the usage characteristics of casual riders compared to annual members in order to develop marketing strategies that convert casual riders into annual members. Cyclistic's finance analysts have concluded that annual members are much more profitable than casual riders. Cyclistic believes that maximizing the number of annual members will be key to future growth. This analysis concludes that casual riders are more likely than members to ride on evenings, weekends, and warmer months, to use electric bikes, and take longer rides. Recommendations drawn from the data include: creation of transactional e-mails for casual riders to see the lower trip price for members, building a digital campaign to highlight events and activities accessible via Cyclistic bikes, and additional marketing through digital channels to expand user awareness of comfortable cycling paths and bike-accessible points of interest.
 
 # 2. Data preparation
 
@@ -171,7 +171,7 @@ duration_histogram <- ggplot(cleaned_rides, aes(ride_duration, fill = member_cas
 duration_histogram
 ```
 
-These histograms show the duration of each ride, grouped into segments of 3 minutes each. Both histograms show left skewness and a peak in the 3-6 minute range.
+These histograms show the duration of each ride, grouped into segments of 3 minutes each. Both histograms show a right skew and a peak in the 3-6 minute range.
 
 ```{r}
 duration_table <- cleaned_rides %>%
